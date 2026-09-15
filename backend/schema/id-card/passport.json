@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Passport",
+  "description": "Schema for extracting data from passports",
+  "type": "object",
+  "properties": {
+    "passport_number": {
+      "type": "string",
+      "description": "Passport number"
+    },
+    "surname": {
+      "type": "string",
+      "description": "Surname / Family name"
+    },
+    "given_names": {
+      "type": "string",
+      "description": "Given names / First and middle names"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "Complete name"
+    },
+    "nationality": {
+      "type": "string",
+      "description": "Nationality / Country of citizenship"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "description": "Date of birth (DD/MM/YYYY or DD MMM YYYY)"
+    },
+    "sex": {
+      "type": "string",
+      "description": "Sex (M/F)"
+    },
+    "place_of_birth": {
+      "type": "string",
+      "description": "Place of birth"
+    },
+    "place_of_issue": {
+      "type": "string",
+      "description": "Place of passport issue"
+    },
+    "date_of_issue": {
+      "type": "string",
+      "description": "Date of passport issue"
+    },
+    "date_of_expiry": {
+      "type": "string",
+      "description": "Passport expiry date"
+    },
+    "mrz_line_1": {
+      "type": "string",
+      "description": "Machine Readable Zone line 1"
+    },
+    "mrz_line_2": {
+      "type": "string",
+      "description": "Machine Readable Zone line 2"
+    },
+    "father_name": {
+      "type": "string",
+      "description": "Father's name (for Indian passports)"
+    },
+    "mother_name": {
+      "type": "string",
+      "description": "Mother's name (for Indian passports)"
+    },
+    "spouse_name": {
+      "type": "string",
+      "description": "Spouse's name"
+    },
+    "address": {
+      "type": "string",
+      "description": "Permanent address"
+    },
+    "old_passport_number": {
+      "type": "string",
+      "description": "Previous passport number if any"
+    },
+    "file_number": {
+      "type": "string",
+      "description": "File number"
+    }
+  },
+  "required": ["passport_number", "full_name", "date_of_birth", "date_of_expiry"]
+}

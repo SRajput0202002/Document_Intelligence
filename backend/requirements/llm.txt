@@ -1,0 +1,18 @@
+# LLM Provider Dependencies
+# Install with: pip install -r requirements/llm.txt
+
+# OpenAI / Azure OpenAI
+openai>=1.0.0
+
+# Google Gemini
+google-generativeai>=0.3.0
+
+# Local models (NuExtract, etc.)
+transformers>=4.40.0
+accelerate>=0.25.0
+
+# PyTorch for local models (if not already installed via OCR providers)
+torch>=2.0.0
+
+# Optional: bitsandbytes for quantization (GPU only)
+# bitsandbytes>=0.41.0

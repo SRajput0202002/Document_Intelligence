@@ -1,0 +1,8 @@
+# OCR Output: MangaOCR
+# Model: manga-ocr
+# Pages: 1
+# Processing Time: 5.03s
+# Characters: 3
+============================================================
+
+．．．

@@ -1,0 +1,77 @@
+# OCR Output: Surya OCR
+# Model: surya-ocr
+# Pages: 1
+# Processing Time: 41.47s
+# Characters: 1610
+============================================================
+
+مؤسسة صقر البستان المقاولات العزل
+FALCON GARDEN INSULATION CONT. EST.
+SPECIALIST IN WATER PROOFING AND FOAM CONCRETE AND COMBO FULL SYSTEM
+<b>TAXINVOICE</b>
+M/s. Havelock One Interiors Ltd
+FALCON GARDEN INSULATION CONT. EST.
+TRN: 100024495200003
+TRN: 100316509700003
+BILL TO
+<b>FGICE</b> Reference:
+M/s. Havelock One Interiors Ltd- Abu Dhabi
+Tax Invoice: 25092
+P.O Box: 30096, Abu Dhabi, U.A.E.
+DATE:<b>08/10/2025</b>
+PO REF: 202550539
+PROJECT CODE: <b>25041</b>
+Dated: 06-Oct-2025
+<b>Payment Due: Due</b>
+Attn.: Mr. Ahamed-054 309 7631
+<b>PROJECT: Magic Planet Mirdif CC</b>
+LOCATION: Dubai-UAE.,
+QTY-
+SL. NO.
+Valve
+<b>DESCRIPTION</b>
+AMOUNT (AED)
+<b>RATE</b>
+<b>M2</b>
+Supply and Apply of Wet Area and Planter
+91,000.00
+Box Waterproofing Works -Total Contract
+91,000.00
+LS
+1.00
+Α
+Value -
+27,300.00
+30% Advance Payment
+В
+27,300.00
+Ε
+Amount Due (AED)
+1,365.00
+F
+Add: Vat (5%)
+G
+28,665.00
+<b>Total Invoice Amount (AED)</b>
+AMOUNT IN WORDS: Dirhams Twenty-Eight Thousand and Six Hundred Sixty-Five and Zero Fils Only.
+<b>BANK DETAILS:</b>
+<b>Beneficiary Name:</b> FALCON GARDEN INSULATION CONT. EST.
+Bank/ Branch: ABUDHABI COMMERCIAL BANK (ADCB)/ BUHAIRA BRANCH
+<b>IBAN Number:</b> AE650030012666354920001
+<b>Account Number:</b> 12666354920001
+عد البستان لمد
+P.O.Box: 72379
+Sharjah - U.A.E.
+EST.
+FALCONG
+60
+GARDEN INSV
+1. Bapesh
+<b>Receiver Signature:</b>
+For M/S Falcon Garden Insulation Cont. Est.
+Date:
+Since: 2007 (more than 15 + years of experience)
+Tel: 06-5349020 Mob: 050-4511772 - 050 4511833
+P.O. Box; 72379
+<b>Dubai -Sharjah-UAE</b>
+<b>Email:</b> Sales@falconinsulation.ae Web: www.falconinsulation.ae

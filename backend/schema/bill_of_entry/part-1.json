@@ -1,0 +1,152 @@
+{
+    "part_1_summary": {
+      "type": "object",
+      "required": ["status", "declarant", "duty_summary", "manifest_details"],
+      "description": "Part I - Bill of Entry Summary containing all primary sections",
+      "x-section-structure": {
+        "main_sections": [
+          "A. STATUS",
+          "B. DECLARANT", 
+          "C. DUTY SUMMARY",
+          "D. MANIFEST DETAILS",
+          "E. BOND DETAILS",
+          "F. PAYMENT DETAILS",
+          "G. WAREHOUSE (WH)",
+          "H. PROCESSING DETAILS",
+          "I. INVOICE DETAILS - SUMMARY",
+          "J. CONTAINER DETAILS"
+        ],
+        "section_details": {
+          "status": {
+            "section_label": "A. STATUS",
+            "fields": [
+              "1.BE STATUS",
+              "2.MODE",
+              "3.DEF BE",
+              "4.KACHA",
+              "5.SEC 48",
+              "6.REIMP",
+              "7.ADV BE (Y/N/P)",
+              "8.ASSESS",
+              "9.EXAM",
+              "10.HSS",
+              "11.FIRSTCHECK",
+              "12. PROV/FINAL",
+              "13.COUNTRY OF ORIGIN",
+              "14.COUNTRY OF CONSIGNMENT",
+              "15.PORT OF LOADING",
+              "16.PORT OF SHIPMENT"
+            ]
+          },
+          "declarant": {
+            "section_label": "B. DECLARANT",
+            "fields": [
+              "1.IMPORTER NAME & ADDRESS",
+              "2.CB NAME",
+              "3.AEO",
+              "4.UCR",
+              "6.AD CODE"
+            ]
+          },
+          "duty_summary": {
+            "section_label": "C. DUTY SUMMARY",
+            "fields": [
+              "1.BCD",
+              "2.ACD",
+              "3.SWS",
+              "4.NCCD",
+              "5.ADD",
+              "6.CVD",
+              "7.IGST",
+              "8.G.CESS",
+              "9.SG",
+              "10.SAED",
+              "11.GSIA",
+              "12.TTA",
+              "13.HEALTH",
+              "14.TOTAL DUTY",
+              "15.INT",
+              "16.PNLTY",
+              "17.FINE",
+              "18.TOT.ASS VAL",
+              "19.TOT. AMOUNT"
+            ]
+          },
+          "manifest_details": {
+            "section_label": "D. MANIFEST DETAILS",
+            "fields": [
+              "1.IGM NO",
+              "2.IGM DATE",
+              "3.INW DATE",
+              "4.GIGMNO",
+              "5.GIGMDT",
+              "6.MAWB NO",
+              "7.DATE",
+              "8.HAWB NO",
+              "9.DATE",
+              "10.PKG",
+              "11.GW"
+            ]
+          },
+          "bond_details": {
+            "section_label": "E. BOND DETAILS",
+            "fields": [
+              "1.BOND NO.",
+              "2.PORT",
+              "3.BOND CD",
+              "4.DEBT AMT",
+              "5.BG AMT"
+            ]
+          },
+          "payment_details": {
+            "section_label": "F. PAYMENT DETAILS",
+            "fields": [
+              "1.SR NO",
+              "2.CHALLAN NO",
+              "3.PAID ON",
+              "4.AMOUNT(Rs.)"
+            ]
+          },
+          "warehouse_details": {
+            "section_label": "G. WH",
+            "fields": [
+              "1.WBE NO.",
+              "2.DATE",
+              "3.WBE SITE",
+              "4.WH CODE"
+            ]
+          },
+          "processing_details": {
+            "section_label": "H. PROCESSING DETAILS",
+            "fields": [
+              "1.EVENT",
+              "2.DATE",
+              "3.TIME",
+              "EXCHANGE RATE"
+            ]
+          },
+          "invoice_details_summary": {
+            "section_label": "I. INVOICE DETAILS - SUMMARY",
+            "fields": [
+              "1.S.NO",
+              "2.INVOICE NO",
+              "3.INV. AMT",
+              "4.CUR"
+            ]
+          },
+          "container_details": {
+            "section_label": "J. CONTAINER DETAILS",
+            "fields": [
+              "1.SNO",
+              "2.LCL/FCL",
+              "3.TRUCK",
+              "4.SEAL",
+              "5.CONTAINER NUMBER"
+            ]
+          },
+          "OOC NO":"",
+          "OOC DATE":""
+        }
+      }
+    }
+  }

@@ -1,0 +1,119 @@
+{
+    "part_3_duties": {
+      "type": "object",
+      "required": ["item_duties"],
+      "description": "Part III - Duties containing detailed duty calculations for each item",
+      "x-section-structure": {
+        "main_sections": [
+          "A. ITEM DETAILS",
+          "B. ITEM DUTY",
+          "C. OTHER DUTIES"
+        ],
+        "section_details": {
+          "item_details": {
+            "section_label": "A. ITEM DETAILS",
+            "fields": [
+              "1.INVSNO",
+              "2.ITEMSN",
+              "3.CTH",
+              "4.CETH",
+              "5.ITEM DESCRIPTION",
+              "6.FS",
+              "7.PQ",
+              "8.DC",
+              "9.WC",
+              "10.AQ",
+              "11.UPI",
+              "12.COO",
+              "13.C.QTY",
+              "14.C.UQC",
+              "15.S.QTY",
+              "16.S.UQC",
+              "17.SCH",
+              "18.STND/PR",
+              "19.RSP",
+              "20.REIMP",
+              "21.PROV",
+              "22.END USE",
+              "23.PRODN",
+              "24.CNTRL",
+              "25.QUALFR",
+              "26.CONTNT",
+              "27.STMNT",
+              "28.SUP DOCS",
+              "29.ASSESS VALUE",
+              "30.TOTAL DUTY"
+            ]
+          },
+          "item_duty": {
+            "section_label": "B. ITEM DUTY",
+            "duty_types": {
+              "1.BCD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "2.ACD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "3.SWS": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "4.SAD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "5.IGST": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "6.G.CESS": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "7.ADD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "8.CVD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "9.SG": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "10.T.VALUE": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"]
+            }
+          },
+          "other_duties": {
+            "section_label": "C. OTHER DUTIES",
+            "duty_types": {
+              "1.SP EXD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "2.CHCESS": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "3.TTA": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "4.CESS": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "5.CAIDC": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "6.EAIDC": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "7.CUS EDC": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "8.CUS HEC": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "9.NCD": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"],
+              "10.AGGR": ["Notn No.", "Notn SNo.", "Rate", "Amount", "Duty Fg"]
+            }
+          }
+        },
+        "glossary": {
+          "item_details": {
+            "INVSNO": "Invoice Serial Number",
+            "ITEMSN": "Item Serial Number",
+            "CTH": "Customs Tariff Heading",
+            "CETH": "Customs Excise Tariff Heading",
+            "FS": "Food Safety",
+            "PQ": "Plant Quarantine",
+            "DC": "Drug Controller",
+            "WC": "Wildlife Crime Control",
+            "AQ": "Animal Quarantine",
+            "UPI": "Unit Price Invoiced",
+            "COO": "Country of Origin",
+            "C.QTY": "Commercial Quantity",
+            "C.UQC": "Commercial Unit Quantity Code",
+            "S.QTY": "Standard Quantity",
+            "S.UQC": "Standard Unit Quantity Code",
+            "SCH": "Scheme Code",
+            "STND/PR": "Standard Price",
+            "RSP": "Retail Sale Price",
+            "REIMP": "Re-import",
+            "PROV": "Provisional",
+            "END USE": "End Use Certificate",
+            "PRODN": "Production",
+            "CNTRL": "Control",
+            "QUALFR": "Qualifier",
+            "CONTNT": "Content",
+            "STMNT": "Statement",
+            "SUP DOCS": "Supporting Documents"
+          },
+          "duty_fields": {
+            "Notn No.": "Notification Number",
+            "Notn SNo.": "Notification Serial Number",
+            "Rate": "Duty Rate",
+            "Amount": "Duty Amount",
+            "Duty Fg": "Duty Flag"
+          }
+        }
+      }
+    }
+  }

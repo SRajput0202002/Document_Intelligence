@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Purchase Order",
+  "description": "Schema for extracting data from purchase orders",
+  "type": "object",
+  "properties": {
+    "po_number": {
+      "type": "string",
+      "description": "Purchase Order number"
+    },
+    "po_date": {
+      "type": "string",
+      "description": "Date of purchase order"
+    },
+    "buyer": {
+      "type": "object",
+      "description": "Buyer/purchaser information",
+      "properties": {
+        "company_name": { "type": "string" },
+        "address": { "type": "string" },
+        "contact_person": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "tax_id": { "type": "string" }
+      }
+    },
+    "vendor": {
+      "type": "object",
+      "description": "Vendor/supplier information",
+      "properties": {
+        "company_name": { "type": "string" },
+        "vendor_code": { "type": "string" },
+        "address": { "type": "string" },
+        "contact_person": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "tax_id": { "type": "string" }
+      }
+    },
+    "ship_to": {
+      "type": "object",
+      "description": "Shipping address",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "attention": { "type": "string" }
+      }
+    },
+    "bill_to": {
+      "type": "object",
+      "description": "Billing address",
+      "properties": {
+        "name": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "line_items": {
+      "type": "array",
+      "description": "Items being ordered",
+      "items": {
+        "type": "object",
+        "properties": {
+          "line_number": { "type": "integer" },
+          "item_code": { "type": "string", "description": "SKU or part number" },
+          "description": { "type": "string" },
+          "quantity": { "type": "number" },
+          "unit": { "type": "string" },
+          "unit_price": { "type": "number" },
+          "amount": { "type": "number" },
+          "hsn_code": { "type": "string" },
+          "delivery_date": { "type": "string" }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal before tax"
+    },
+    "tax_amount": {
+      "type": "number",
+      "description": "Total tax"
+    },
+    "shipping_cost": {
+      "type": "number",
+      "description": "Shipping/freight charges"
+    },
+    "discount": {
+      "type": "number",
+      "description": "Total discount"
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Grand total"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code"
+    },
+    "payment_terms": {
+      "type": "string",
+      "description": "Payment terms (Net 30, etc.)"
+    },
+    "delivery_terms": {
+      "type": "string",
+      "description": "Delivery/shipping terms"
+    },
+    "expected_delivery_date": {
+      "type": "string",
+      "description": "Expected delivery date"
+    },
+    "incoterms": {
+      "type": "string",
+      "description": "Incoterms (FOB, CIF, etc.)"
+    },
+    "special_instructions": {
+      "type": "string",
+      "description": "Special instructions or notes"
+    },
+    "approved_by": {
+      "type": "string",
+      "description": "Name of approver"
+    },
+    "approval_date": {
+      "type": "string",
+      "description": "Date of approval"
+    }
+  },
+  "required": ["po_number", "po_date", "vendor", "line_items", "total_amount"]
+}

@@ -1,0 +1,42 @@
+{
+  "part_3_item_details": {
+    "type": "object",
+    "required": ["invoice_items"],
+    "description": "Part III - Item Details containing comprehensive item-level information including duties, taxes, schemes, and origin details",
+    "x-section-structure": {
+      "section_label": "PART - III - ITEM DETAILS",
+      "fields": [
+        "1.INVSN",
+        "2.ITEMSN",
+        "3.HS CD",
+        "4.DESCRIPTION",
+        "5.QUANTITY",
+        "6.UQC",
+        "7.RATE",
+        "8.VALUE(F/C)",
+        "9.FOB (INR)",
+        "10.PMV",
+        "11.DUTYAMT",
+        "12.CESS RT",
+        "13.CESAMT",
+        "14.DBKCLMD",
+        "15.IGSTSTAT",
+        "16.IGST VALUE",
+        "17.IGST AMOUNT",
+        "18.SCHCOD",
+        "19.SCHEME DESCRIPTION",
+        "20.SQC MSR",
+        "21.SQC UQC",
+        "22.STATE OF ORIGIN",
+        "23.DISTRICT OF ORIGIN",
+        "24.PT Abroad",
+        "25.COMP CESS",
+        "26.END USE",
+        "27.FTA BENEFIT AVAILED",
+        "28.REWARD BENEFIT",
+        "29.THIRD PARTY ITEM"
+      ],
+      "note": "INVOICE (1/1) indicates this is invoice 1 of 1 total invoices and ITEM SN (1/1) indicates this is item 1 of 1 total items in the invoice, extract all the relevant information accordingly."
+    }
+  }
+}

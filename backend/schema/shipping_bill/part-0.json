@@ -1,0 +1,26 @@
+{
+  "shipping_bill_part_0": {
+    "type": "object",
+    "description": "Part 0 - Header Information containing document metadata and identification",
+    "x-section-structure": {
+      "section_label": "PART - 0 - HEADER INFORMATION",
+      "fields": [
+        "PORT NAME",
+        "PORT ADDRESS",
+        "PORT CODE",
+        "SB NO",
+        "SB DATE",
+        "IEC/Br",
+        "GSTIN/TYPE",
+        "CB CODE",
+        "TYPE",
+        "Nos INV",
+        "Nos ITEM",
+        "Nos CONT",
+        "PKG",
+        "G.WT KGS",
+        "QR CODE"
+      ]
+    }
+  }
+}

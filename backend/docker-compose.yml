@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  extractor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customs-document-extractor
+    ports:
+      - "8001:8001"
+    environment:
+      # Required: At least one Gemini API key
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      # Optional: Additional keys for load balancing (if you have multiple keys)
+      - GEMINI_API_KEY_1=${GEMINI_API_KEY_1:-}
+      - GEMINI_API_KEY_2=${GEMINI_API_KEY_2:-}
+      # API Rate Limiting (per key)
+      - GEMINI_REQUESTS_PER_MINUTE=${GEMINI_REQUESTS_PER_MINUTE:-15}
+    volumes:
+      # Mount output directory to persist extracted data
+      - ./output:/app/output
+      # Mount logs directory
+      - ./logs:/app/logs
+      # Mount temp directory (files are auto-deleted after extraction)
+      - ./temp:/app/temp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+

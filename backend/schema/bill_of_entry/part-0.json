@@ -1,0 +1,34 @@
+{
+    "part_0_header": {
+      "type": "object",
+      "required": ["port_code", "be_no", "be_date"],
+      "description": "Part 0 - Header Details containing BE identification and basic information",
+      "x-section-structure": {
+        "main_sections": [
+          "HEADER"
+        ],
+        "section_details": {
+          "header": {
+            "section_label": "HEADER",
+            "fields": [
+              "Port Code",
+              "BE No",
+              "BE Date",
+              "BE Type",
+              "IEC/Br",
+              "OOC COPY",
+              "GSTIN/TYPE",
+              "CB CODE",
+              "TYPE",
+              "INV",
+              "ITEM",
+              "CONT",
+              "Nos",
+              "PKG",
+              "G.WT (KGS)"
+            ]
+          }
+        }
+      }
+    }
+  }

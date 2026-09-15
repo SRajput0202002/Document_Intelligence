@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medical Prescription",
+  "description": "Schema for extracting data from medical prescriptions",
+  "type": "object",
+  "properties": {
+    "prescription_date": {
+      "type": "string",
+      "description": "Date of prescription"
+    },
+    "prescription_id": {
+      "type": "string",
+      "description": "Prescription ID or reference number"
+    },
+    "doctor": {
+      "type": "object",
+      "description": "Prescribing doctor information",
+      "properties": {
+        "name": { "type": "string", "description": "Doctor's name" },
+        "qualification": { "type": "string", "description": "Medical qualifications (MBBS, MD, etc.)" },
+        "specialization": { "type": "string", "description": "Medical specialization" },
+        "registration_number": { "type": "string", "description": "Medical registration number" },
+        "clinic_name": { "type": "string", "description": "Clinic or hospital name" },
+        "clinic_address": { "type": "string", "description": "Clinic address" },
+        "phone": { "type": "string", "description": "Contact phone" },
+        "email": { "type": "string", "description": "Contact email" }
+      }
+    },
+    "patient": {
+      "type": "object",
+      "description": "Patient information",
+      "properties": {
+        "name": { "type": "string", "description": "Patient's name" },
+        "age": { "type": "string", "description": "Patient's age" },
+        "gender": { "type": "string", "description": "Patient's gender" },
+        "weight": { "type": "string", "description": "Patient's weight" },
+        "patient_id": { "type": "string", "description": "Patient ID or MRN" },
+        "address": { "type": "string", "description": "Patient's address" },
+        "phone": { "type": "string", "description": "Patient's contact" }
+      }
+    },
+    "diagnosis": {
+      "type": "array",
+      "description": "Diagnosis or medical conditions",
+      "items": {
+        "type": "string"
+      }
+    },
+    "chief_complaints": {
+      "type": "array",
+      "description": "Chief complaints or symptoms",
+      "items": {
+        "type": "string"
+      }
+    },
+    "medications": {
+      "type": "array",
+      "description": "Prescribed medications",
+      "items": {
+        "type": "object",
+        "properties": {
+          "medicine_name": { "type": "string", "description": "Name of medicine" },
+          "generic_name": { "type": "string", "description": "Generic/salt name" },
+          "dosage": { "type": "string", "description": "Dosage strength (e.g., 500mg)" },
+          "form": { "type": "string", "description": "Form (Tablet, Syrup, Injection, etc.)" },
+          "frequency": { "type": "string", "description": "Frequency (1-0-1, Twice daily, etc.)" },
+          "duration": { "type": "string", "description": "Duration (7 days, 2 weeks, etc.)" },
+          "quantity": { "type": "string", "description": "Quantity to dispense" },
+          "timing": { "type": "string", "description": "Timing (Before meals, After meals, etc.)" },
+          "special_instructions": { "type": "string", "description": "Special instructions" }
+        }
+      }
+    },
+    "tests_advised": {
+      "type": "array",
+      "description": "Laboratory or diagnostic tests advised",
+      "items": {
+        "type": "string"
+      }
+    },
+    "advice": {
+      "type": "array",
+      "description": "General medical advice",
+      "items": {
+        "type": "string"
+      }
+    },
+    "follow_up_date": {
+      "type": "string",
+      "description": "Follow-up appointment date"
+    },
+    "vitals": {
+      "type": "object",
+      "description": "Vital signs recorded",
+      "properties": {
+        "blood_pressure": { "type": "string" },
+        "pulse": { "type": "string" },
+        "temperature": { "type": "string" },
+        "spo2": { "type": "string" },
+        "respiratory_rate": { "type": "string" }
+      }
+    },
+    "allergies": {
+      "type": "array",
+      "description": "Known allergies",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["doctor", "patient", "medications", "prescription_date"]
+}

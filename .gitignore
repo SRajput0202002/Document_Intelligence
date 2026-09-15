@@ -1,0 +1,159 @@
+# Document Intelligence - Git Ignore
+
+# =============================================================================
+# Backend runtime directories
+# =============================================================================
+backend/temp/
+backend/logs/
+backend/output/
+backend/venv/
+backend/.venv/
+
+# Data folder - ignore everything including .db files
+backend/data/
+
+# =============================================================================
+# Frontend
+# =============================================================================
+frontend/node_modules/
+frontend/.next/
+product-video/
+frontend/out/
+frontend/.vercel/
+frontend/*.tsbuildinfo
+
+# =============================================================================
+# Environment files (contains API keys!)
+# =============================================================================
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =============================================================================
+# IDE / OS
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.claude/
+.crossnote/
+.auto-claude/
+
+# =============================================================================
+# Documents (PDFs, images, Excel files - NO documents should be pushed)
+# =============================================================================
+*.pdf
+*.PDF
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.gif
+*.GIF
+*.bmp
+*.BMP
+*.tiff
+*.TIFF
+*.xlsx
+*.xls
+*.xlsm
+*.doc
+*.docx
+*.ppt
+*.pptx
+
+# =============================================================================
+# Database files
+# =============================================================================
+*.db
+*.sqlite
+*.sqlite3
+
+# =============================================================================
+# Playwright
+# =============================================================================
+playwright/
+playwright-report/
+test-results/
+.playwright/
+
+# =============================================================================
+# Large files and media
+# =============================================================================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# =============================================================================
+# Excluded directories
+# =============================================================================
+output/
+docs/
+examples/
+tests/
+test_ocr_providers/
+
+# =============================================================================
+# Logs and temporary files
+# =============================================================================
+logs/
+*.log
+*.tmp
+*.bak
+.cache/
+temp_extraction/
+*_raw_response.txt
+*_response.json
+
+# Local / handoff multidoc notes (not tracked)
+MULTIDOC_WORKFLOW_SUMMARY.txt
+
+# =============================================================================
+# Exceptions - allow these files
+# =============================================================================
+!README.md
+!readme.md
+!README.MD
+!*/README.md
+!backend/schema/**/*.json
+!frontend/*.json
+!frontend/**/*.json
+!frontend/lib/

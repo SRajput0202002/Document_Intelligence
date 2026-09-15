@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Universal Invoice",
+  "description": "Schema for extracting data from invoices of any type",
+  "type": "object",
+  "properties": {
+    "invoice_number": {
+      "type": "string",
+      "description": "Invoice number or reference ID"
+    },
+    "invoice_date": {
+      "type": "string",
+      "description": "Date of invoice (YYYY-MM-DD format if possible)"
+    },
+    "due_date": {
+      "type": "string",
+      "description": "Payment due date"
+    },
+    "vendor": {
+      "type": "object",
+      "description": "Seller/vendor information",
+      "properties": {
+        "name": { "type": "string", "description": "Company or individual name" },
+        "address": { "type": "string", "description": "Full address" },
+        "tax_id": { "type": "string", "description": "Tax ID, GST number, VAT number, etc." },
+        "phone": { "type": "string", "description": "Contact phone" },
+        "email": { "type": "string", "description": "Contact email" }
+      }
+    },
+    "buyer": {
+      "type": "object",
+      "description": "Buyer/customer information",
+      "properties": {
+        "name": { "type": "string", "description": "Company or individual name" },
+        "address": { "type": "string", "description": "Full address" },
+        "tax_id": { "type": "string", "description": "Tax ID, GST number, VAT number, etc." },
+        "phone": { "type": "string", "description": "Contact phone" },
+        "email": { "type": "string", "description": "Contact email" }
+      }
+    },
+    "line_items": {
+      "type": "array",
+      "description": "List of items/services on the invoice",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string", "description": "Item description" },
+          "quantity": { "type": "number", "description": "Quantity" },
+          "unit": { "type": "string", "description": "Unit of measure" },
+          "unit_price": { "type": "number", "description": "Price per unit" },
+          "amount": { "type": "number", "description": "Line total" },
+          "hsn_code": { "type": "string", "description": "HSN/SAC code if applicable" },
+          "tax_rate": { "type": "number", "description": "Tax rate percentage" }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal before tax"
+    },
+    "tax_details": {
+      "type": "array",
+      "description": "Breakdown of taxes",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tax_type": { "type": "string", "description": "Type of tax (GST, VAT, CGST, SGST, etc.)" },
+          "rate": { "type": "number", "description": "Tax rate percentage" },
+          "amount": { "type": "number", "description": "Tax amount" }
+        }
+      }
+    },
+    "total_tax": {
+      "type": "number",
+      "description": "Total tax amount"
+    },
+    "discount": {
+      "type": "number",
+      "description": "Total discount amount"
+    },
+    "total_amount": {
+      "type": "number",
+      "description": "Grand total including tax"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code (INR, USD, EUR, etc.)"
+    },
+    "payment_terms": {
+      "type": "string",
+      "description": "Payment terms and conditions"
+    },
+    "bank_details": {
+      "type": "object",
+      "description": "Bank account for payment",
+      "properties": {
+        "bank_name": { "type": "string" },
+        "account_number": { "type": "string" },
+        "ifsc_code": { "type": "string" },
+        "swift_code": { "type": "string" }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or comments"
+    }
+  },
+  "required": ["invoice_number", "invoice_date", "total_amount"]
+}

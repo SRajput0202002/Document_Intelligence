@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PAN Card",
+  "description": "Schema for extracting data from Indian PAN cards",
+  "type": "object",
+  "properties": {
+    "pan_number": {
+      "type": "string",
+      "description": "10-character PAN number (e.g., ABCDE1234F)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name as printed on card"
+    },
+    "father_name": {
+      "type": "string",
+      "description": "Father's name"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "description": "Date of birth (DD/MM/YYYY format)"
+    },
+    "signature_name": {
+      "type": "string",
+      "description": "Name as it appears in signature area"
+    },
+    "card_type": {
+      "type": "string",
+      "description": "Type of PAN holder (Individual, Company, etc.)"
+    }
+  },
+  "required": ["pan_number", "name"]
+}

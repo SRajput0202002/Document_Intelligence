@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Contract/Agreement",
+  "description": "Schema for extracting data from contracts and agreements",
+  "type": "object",
+  "properties": {
+    "contract_title": {
+      "type": "string",
+      "description": "Title or name of the contract"
+    },
+    "contract_type": {
+      "type": "string",
+      "description": "Type of contract (Employment, Service, NDA, Lease, etc.)"
+    },
+    "contract_number": {
+      "type": "string",
+      "description": "Contract reference number"
+    },
+    "effective_date": {
+      "type": "string",
+      "description": "Date when contract becomes effective"
+    },
+    "execution_date": {
+      "type": "string",
+      "description": "Date when contract was signed"
+    },
+    "expiration_date": {
+      "type": "string",
+      "description": "Contract end/expiry date"
+    },
+    "parties": {
+      "type": "array",
+      "description": "Parties involved in the contract",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": { "type": "string", "description": "Role (Party A, Seller, Licensor, Employer, etc.)" },
+          "name": { "type": "string", "description": "Legal name" },
+          "type": { "type": "string", "description": "Entity type (Individual, Company, etc.)" },
+          "address": { "type": "string", "description": "Address" },
+          "representative": { "type": "string", "description": "Authorized representative name" },
+          "designation": { "type": "string", "description": "Designation of representative" }
+        }
+      }
+    },
+    "contract_value": {
+      "type": "object",
+      "description": "Financial terms",
+      "properties": {
+        "amount": { "type": "number", "description": "Contract value" },
+        "currency": { "type": "string", "description": "Currency" },
+        "payment_terms": { "type": "string", "description": "Payment terms" }
+      }
+    },
+    "term_duration": {
+      "type": "string",
+      "description": "Duration of the contract"
+    },
+    "renewal_terms": {
+      "type": "string",
+      "description": "Auto-renewal or renewal terms"
+    },
+    "termination_clause": {
+      "type": "string",
+      "description": "Termination conditions"
+    },
+    "notice_period": {
+      "type": "string",
+      "description": "Notice period for termination"
+    },
+    "governing_law": {
+      "type": "string",
+      "description": "Governing law and jurisdiction"
+    },
+    "key_obligations": {
+      "type": "array",
+      "description": "Key obligations of parties",
+      "items": {
+        "type": "object",
+        "properties": {
+          "party": { "type": "string" },
+          "obligation": { "type": "string" }
+        }
+      }
+    },
+    "confidentiality_clause": {
+      "type": "boolean",
+      "description": "Whether confidentiality clause exists"
+    },
+    "signatures": {
+      "type": "array",
+      "description": "Signature details",
+      "items": {
+        "type": "object",
+        "properties": {
+          "party": { "type": "string" },
+          "signatory_name": { "type": "string" },
+          "designation": { "type": "string" },
+          "date": { "type": "string" }
+        }
+      }
+    },
+    "witnesses": {
+      "type": "array",
+      "description": "Witness details if any",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "address": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["contract_title", "parties", "effective_date"]
+}

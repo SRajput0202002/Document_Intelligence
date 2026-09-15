@@ -1,0 +1,191 @@
+{
+    "part_4_additional_details": {
+      "type": "object",
+      "description": "Part IV - Additional Details containing supplementary information",
+      "x-section-structure": {
+        "main_sections": [
+          "A. SVB DETAILS",
+          "B. PREVIOUS BEs",
+          "C. RE-IMPORT AFTER EXPORT",
+          "D. ITEM MANUFACTURER/PRODUCER/GROWER DETAILS",
+          "E. ACCESSORY STATUS",
+          "F. LICENCE DETAILS",
+          "G. CERTIFICATE DETAILS",
+          "H. HSS DETAILS",
+          "I. SINGLE WINDOW DECLARATION",
+          "J. SINGLE WINDOW DECLARATION - CONSTITUENTS",
+          "K. SINGLE WINDOW DECLARATION - CONTROL",
+          "L. SUPPORTING DOCUMENTS",
+          "M. CONTAINER DETAILS",
+          "N. INVOICE DETAILS"
+        ],
+        "section_details": {
+          "svb_details": {
+            "section_label": "A. SVB DETAILS",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.REF NO",
+              "4.REF DT",
+              "5.PRT CD",
+              "6.LAB",
+              "7.P/F",
+              "8.LOAD DATE",
+              "9. P/F"
+            ]
+          },
+          "previous_bes": {
+            "section_label": "B. PREVIOUS BEs",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.BE NO",
+              "4.BE DATE",
+              "5.PRT CD",
+              "6.UNITPRICE",
+              "7.CURRENCY CODE"
+            ]
+          },
+          "reimport_after_export": {
+            "section_label": "C. RE-IMPORT AFTER EXPORT",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.NOTN NO",
+              "4.SLNO",
+              "5.FRT",
+              "6.INS",
+              "7.DUTY",
+              "8.SB NO",
+              "9.SB DT",
+              "10.PORTCD",
+              "11.SINV",
+              "12.SITEMN"
+            ]
+          },
+          "item_manufacturer_details": {
+            "section_label": "D. ITEM MANUFACTURER/PRODUCER/GROWER DETAILS",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.TYPE",
+              "4.MANUFACT CD",
+              "5.SOURCE CY",
+              "6.TRANS CY",
+              "7.ADDRESS"
+            ]
+          },
+          "accessory_status": {
+            "section_label": "E. ACCESSORY STATUS",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.ACESSORY ITEM DETAILS"
+            ]
+          },
+          "licence_details": {
+            "section_label": "F. LICENCE DETAILS",
+            "fields": [
+              "1.INVSNO",
+              "2.ITMSNO",
+              "3.LIC SLNO",
+              "4.LIC NO",
+              "5.LIC DATE",
+              "6.CODE",
+              "7.PORT",
+              "8.DEBIT VALUE",
+              "9.QTY",
+              "10.UQC",
+              "11.DEBIT DUTY"
+            ]
+          },
+          "certificate_details": {
+            "section_label": "G. CERTIFICATE DETAILS",
+            "fields": [
+              "1.CERTIFICATE NUMBER",
+              "2.DATE",
+              "3.TYPE",
+              "4.PRC LEVEL",
+              "5.IEC",
+              "6.BRANCH SLNO"
+            ]
+          },
+          "hss_details": {
+            "section_label": "H. HSS DETAILS",
+            "fields": []
+          },
+          "single_window_declaration": {
+            "section_label": "I. SINGLE WINDOW DECLARATION",
+            "fields": [
+              "1.INVSN",
+              "2.ITMSNO",
+              "3.INFO TYP",
+              "4.QUALIFIER",
+              "5.INFO CD",
+              "6.INFO TEXT",
+              "7.INFO MSR",
+              "8.UQC"
+            ]
+          },
+          "single_window_constituents": {
+            "section_label": "J. SINGLE WINDOW DECLARATION - CONSTITUENTS",
+            "fields": [
+              "1.INVSN",
+              "2.ITMSNO",
+              "3.C SNO",
+              "4.NAME",
+              "5.CODE",
+              "6.PERCENTAGE",
+              "7.YIELD PCT",
+              "8.ING"
+            ]
+          },
+          "single_window_control": {
+            "section_label": "K. SINGLE WINDOW DECLARATION - CONTROL",
+            "fields": [
+              "1.INVSN",
+              "2.ITMSNO",
+              "3.CONTROL TYPE",
+              "4.LOCATION",
+              "5.SRT DT",
+              "6.END DT",
+              "7.RES CD",
+              "8.RES TEXT"
+            ]
+          },
+          "supporting_documents": {
+            "section_label": "L. SUPPORTING DOCUMENTS",
+            "fields": [
+              "1.INVSN",
+              "2.ITMSNO",
+              "3.TYP",
+              "4.ICEGATE ID",
+              "5.IRN",
+              "6.DOC CODE",
+              "7.ISSUE PLACE",
+              "8.ISSUE DT",
+              "9.EXP DT"
+            ]
+          },
+          "container_details": {
+            "section_label": "M. CONTAINER DETAILS",
+            "fields": [
+              "1.CONTAINER NUMBER",
+              "2.TRUCK NUMBER",
+              "3.SEAL NUMBER",
+              "4.FCL/LCL"
+            ]
+          },
+          "invoice_details": {
+            "section_label": "N. INVOICE DETAILS",
+            "fields": [
+              "1.S NO",
+              "2.INVOICE NO",
+              "3.INVOICE AMOUNT",
+              "4.CUR"
+            ]
+          }
+        }
+      }
+    }
+  }

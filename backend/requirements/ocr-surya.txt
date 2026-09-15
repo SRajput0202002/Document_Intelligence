@@ -1,0 +1,15 @@
+# Surya OCR Dependencies
+# Install with: pip install -r requirements/ocr-surya.txt
+
+# Core OCR - Surya (EfficientViT + Donut)
+surya-ocr>=0.17.0
+
+# PyTorch (install appropriate version for your system)
+# For CPU: pip install torch torchvision
+# For CUDA: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu118
+# For MPS (Mac): pip install torch torchvision
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Utilities
+numpy>=1.21.0

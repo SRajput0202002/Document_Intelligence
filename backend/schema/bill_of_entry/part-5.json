@@ -1,0 +1,64 @@
+{
+    "part_5_other_compliances": {
+      "type": "object",
+      "description": "Part V - Other Compliances containing examination and compliance details",
+      "x-section-structure": {
+        "main_sections": [
+          "A. EXAMINATION ORDER RMS",
+          "A1. EXAMINATION ORDER",
+          "B. EXAMINATION INSTRUCTIONS",
+          "B1. PGA EXAMINATION INSTRUCTIONS",
+          "C. COMPULSORY COMPLIANCE",
+          "D. AC REMARKS",
+          "E. EXAMINATION REPORT",
+          "F. SUPERINTENDENT COMMENTS",
+          "OOC DETAILS"
+        ],
+        "section_details": {
+          "examination_order_rms": {
+            "section_label": "A. EXAMINATION ORDER RMS",
+            "fields": []
+          },
+          "examination_order": {
+            "section_label": "A1. EXAMINATION ORDER",
+            "fields": []
+          },
+          "examination_instructions": {
+            "section_label": "B. EXAMINATION INSTRUCTIONS",
+            "fields": []
+          },
+          "pga_examination_instructions": {
+            "section_label": "B1. PGA EXAMINATION INSTRUCTIONS",
+            "fields": [
+              "Inv No",
+              "Item No",
+              "Agency Status"
+            ]
+          },
+          "compulsory_compliance": {
+            "section_label": "C. COMPULSORY COMPLIANCE",
+            "fields": []
+          },
+          "ac_remarks": {
+            "section_label": "D. AC REMARKS",
+            "fields": []
+          },
+          "examination_report": {
+            "section_label": "E. EXAMINATION REPORT",
+            "fields": []
+          },
+          "superintendent_comments": {
+            "section_label": "F. SUPERINTENDENT COMMENTS",
+            "fields": []
+          },
+          "ooc_details": {
+            "section_label": "OOC DETAILS",
+            "fields": [
+              "OOC No",
+              "OOC Date"
+            ]
+          }
+        }
+      }
+    }
+  }

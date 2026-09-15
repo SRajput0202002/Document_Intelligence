@@ -1,0 +1,54 @@
+# Core Dependencies
+# Install with: pip install -r requirements/base.txt
+
+# FastAPI framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Data validation and ORM
+pydantic>=2.0
+email-validator>=2.0.0
+sqlalchemy>=2.0
+psycopg2-binary>=2.9.6
+
+# Environment and utilities
+python-dotenv>=1.0.0
+click>=8.0.0
+
+# Image processing
+Pillow>=10.0.0
+pillow-heif>=0.13.0  # HEIC/HEIF image support
+
+# Document conversion
+python-docx>=0.8.11  # Word document parsing
+openpyxl>=3.1.0      # Excel spreadsheet parsing
+reportlab>=4.0.0     # PDF generation
+
+# PDF processing
+PyMuPDF>=1.23.0
+pymupdf4llm>=0.2.0
+pdfplumber>=0.10.0
+
+# Schema validation
+jsonschema>=4.17.0
+
+# OCR Providers
+mistralai>=1.0.0
+azure-ai-documentintelligence>=1.0.0
+azure-storage-blob>=12.19.0
+
+# LLM Providers
+openai>=1.0.0
+google-generativeai>=0.3.0
+
+# Additional OCR Providers
+pytesseract>=0.3.10
+easyocr>=1.7.0
+google-cloud-vision>=3.4.0
+boto3>=1.28.0
+requests>=2.31.0
+
+# Authentication
+bcrypt>=4.0.0
+python-jose[cryptography]>=3.3.0

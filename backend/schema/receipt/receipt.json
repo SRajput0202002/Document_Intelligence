@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Receipt",
+  "description": "Schema for extracting data from receipts and bills",
+  "type": "object",
+  "properties": {
+    "receipt_number": {
+      "type": "string",
+      "description": "Receipt or transaction number"
+    },
+    "date": {
+      "type": "string",
+      "description": "Date of transaction (YYYY-MM-DD format if possible)"
+    },
+    "time": {
+      "type": "string",
+      "description": "Time of transaction"
+    },
+    "merchant": {
+      "type": "object",
+      "description": "Merchant/store information",
+      "properties": {
+        "name": { "type": "string", "description": "Store or business name" },
+        "address": { "type": "string", "description": "Store address" },
+        "phone": { "type": "string", "description": "Contact phone" },
+        "tax_id": { "type": "string", "description": "Tax ID or GST number" }
+      }
+    },
+    "items": {
+      "type": "array",
+      "description": "List of purchased items",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Item name" },
+          "quantity": { "type": "number", "description": "Quantity" },
+          "price": { "type": "number", "description": "Item price" },
+          "total": { "type": "number", "description": "Line total" }
+        }
+      }
+    },
+    "subtotal": {
+      "type": "number",
+      "description": "Subtotal before tax/discounts"
+    },
+    "tax": {
+      "type": "number",
+      "description": "Tax amount"
+    },
+    "discount": {
+      "type": "number",
+      "description": "Discount amount"
+    },
+    "tip": {
+      "type": "number",
+      "description": "Tip or gratuity amount"
+    },
+    "total": {
+      "type": "number",
+      "description": "Total amount paid"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "Method of payment (Cash, Card, UPI, etc.)"
+    },
+    "card_last_four": {
+      "type": "string",
+      "description": "Last 4 digits of card if applicable"
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code"
+    },
+    "category": {
+      "type": "string",
+      "description": "Expense category (Food, Travel, Office, etc.)"
+    }
+  },
+  "required": ["merchant", "date", "total"]
+}

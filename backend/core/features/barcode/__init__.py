@@ -1,0 +1,1 @@
+"""Barcode / QR feature backends."""

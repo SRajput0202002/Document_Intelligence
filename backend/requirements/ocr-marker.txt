@@ -1,0 +1,14 @@
+# Marker OCR Dependencies
+# Install with: pip install -r requirements/ocr-marker.txt
+# Note: First run downloads ~5GB of model weights
+
+# Marker PDF - High-accuracy PDF to markdown converter
+# Includes Surya OCR, layout detection, reading order, table recognition
+marker-pdf>=1.10.0
+
+# Note: marker-pdf will install these dependencies automatically:
+# - surya-ocr (OCR + layout detection)
+# - transformers (Hugging Face models)
+# - torch (PyTorch)
+# - pdftext (PDF text extraction)
+# - pillow (Image processing)

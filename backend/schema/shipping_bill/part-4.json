@@ -1,0 +1,204 @@
+{
+  "part_4_export_scheme_details": {
+    "type": "object",
+    "description": "Part IV - Export Scheme Details containing comprehensive information about export schemes, licenses, declarations, and supporting documentation",
+    "x-section-structure": {
+      "section_label": "PART - IV - EXPORT SCHEME DETAILS",
+      "main_sections": [
+        "A. DRAWBACK & ROSL CLAIM",
+        "B. AA / DFIA LICENCE DETAILS",
+        "C. JOBBING DETAILS",
+        "D. SINGLE WINDOW DECLARATION",
+        "E. SINGLE WINDOW DECLARATION - CONSTITUENTS",
+        "F. SINGLE WINDOW DECLARATION - CONTROL",
+        "G. SUPPORTING DOCUMENTS",
+        "H. INVOICE DETAILS",
+        "I. CONTAINER DETAILS",
+        "J. AR4 DETAILS",
+        "K. THIRD PARTY DETAILS",
+        "L. ITEM MANUFACTURER/PRODUCER/GROWER DETAILS",
+        "M. RODTEP DETAILS",
+        "N. REEXPORT DETAILS",
+        "OTHER ADDITIONAL INFORMATION"
+      ],
+      "section_details": {
+        "drawback_rosl_claim": {
+          "section_label": "A. DRAWBACK & ROSL CLAIM",
+          "fields": [
+            "1.INV SNO",
+            "2.ITEM SNO",
+            "3.DBK SNO.",
+            "4.QTY/WT",
+            "5.VALUE",
+            "6.RATE",
+            "7.DBK AMT",
+            "8.STALEV",
+            "9.CENLEV",
+            "10.ROSCTL AMT"
+          ]
+        },
+        "aa_dfia_licence_details": {
+          "section_label": "B. AA / DFIA LICENCE DETAILS",
+          "fields": [
+            "1.INV SNO",
+            "2.ITEM SNO",
+            "3.LICENCE NO",
+            "4.DESCN OF EXPORT ITEM",
+            "5.EXP SNO",
+            "6.EXPQTY",
+            "7.UQC",
+            "8.FOB VALUE",
+            "9.SION",
+            "10.DESCN OF IMPORT ITEM",
+            "11.IMP SNO",
+            "12.IMPQT",
+            "13.UQC",
+            "14.INDIG / IMP"
+          ]
+        },
+        "jobbing_details": {
+          "section_label": "C. JOBBING DETAILS",
+          "fields": [
+            "1.BE NO",
+            "2.BE DATE",
+            "3.PORT CODE",
+            "4.DESCN OF IMPORTED GOODS",
+            "5.QTY IMP",
+            "6.QTY USED"
+          ]
+        },
+        "single_window_declaration": {
+          "section_label": "D. SINGLE WINDOW DECLARATION",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSN",
+            "3.INFO",
+            "4.QUALIFIER",
+            "5.INFO CD",
+            "6.INFO TEXT",
+            "7.INFO MSR",
+            "8.UQC"
+          ]
+        },
+        "single_window_constituents": {
+          "section_label": "E. SINGLE WINDOW DECLARATION - CONSTITUENTS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSNO",
+            "3.C SNO",
+            "4.NAME",
+            "5.CODE",
+            "6.PERCENTAGE",
+            "7.YIELD PCT",
+            "8.ING"
+          ]
+        },
+        "single_window_control": {
+          "section_label": "F. SINGLE WINDOW DECLARATION - CONTROL",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSNO",
+            "3.CONTROL TYPE",
+            "4.LOCATION",
+            "5.ST DT",
+            "6.END DT",
+            "7.RES CD",
+            "8.RES TEXT"
+          ]
+        },
+        "supporting_documents": {
+          "section_label": "G. SUPPORTING DOCUMENTS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSNO",
+            "3.DOCTYPCD",
+            "4.ICEGATE ID",
+            "5.IRN",
+            "6.PARTY CD",
+            "7.ISSUE PLA",
+            "8.ISS DT",
+            "9.EXP DT"
+          ]
+        },
+        "invoice_details": {
+          "section_label": "H. INVOICE DETAILS",
+          "fields": [
+            "1.SNO",
+            "2.INVOICE NO",
+            "3.INVOICE AMOUNT",
+            "4.CURRENCY"
+          ]
+        },
+        "container_details": {
+          "section_label": "I. CONTAINER DETAILS",
+          "fields": [
+            "1.SNO",
+            "2.CONTAINER",
+            "3.SEAL",
+            "4.DATE"
+          ]
+        },
+        "ar4_details": {
+          "section_label": "J. AR4 DETAILS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSN",
+            "3.AR4 NUMBER",
+            "4.AR4 DATE",
+            "5.COMMISSIONERATE",
+            "6.DIVISION",
+            "7.RANGE"
+          ]
+        },
+        "third_party_details": {
+          "section_label": "K. THIRD PARTY DETAILS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSN",
+            "3.IEC",
+            "4.EXPORTER NAME",
+            "5.ADDRESS",
+            "6.GSTN ID AND TYPE"
+          ]
+        },
+        "manufacturer_details": {
+          "section_label": "L. ITEM MANUFACTURER/PRODUCER/GROWER DETAILS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSN",
+            "3.TYPE",
+            "4.MANUFACT CD",
+            "5.SOURCE STATE",
+            "6.TRANS CY",
+            "7.ADDRESS"
+          ]
+        },
+        "rodtep_details": {
+          "section_label": "M. RODTEP DETAILS",
+          "fields": [
+            "1.INVSN",
+            "2.ITMSN",
+            "3.QUANTITY",
+            "4.UQC",
+            "5.NO. OF UNITS",
+            "6.VALUE"
+          ]
+        },
+        "reexport_details": {
+          "section_label": "N. REEXPORT DETAILS",
+          "fields": [
+            "1.INVS",
+            "2.ITMSN",
+            "3.BE SITE ID",
+            "4.BE NUMBER",
+            "5.BE DATE",
+            "6.BE INV SNO",
+            "7.BE ITEM S",
+            "8.BE QTY",
+            "9.BE UQC"
+          ]
+        }
+      }
+    }
+  }
+}

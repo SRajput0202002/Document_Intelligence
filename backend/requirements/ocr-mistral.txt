@@ -1,0 +1,5 @@
+# Mistral OCR Dependencies
+# Install with: pip install -r requirements/ocr-mistral.txt
+
+# Mistral AI SDK (for Mistral OCR and Chat API)
+mistralai==1.12.4

@@ -1,0 +1,112 @@
+{
+    "part_2_invoice_valuation": {
+      "type": "object",
+      "required": ["invoices"],
+      "description": "Part II - Invoice & Valuation Details containing invoice-wise breakdown with basic commercial line items",
+      "x-section-structure": {
+        "main_sections": [
+          "A. INVOICE",
+          "B. TRANSACTING PARTIES",
+          "C. VALUATION",
+          "D. COST & SERVICES",
+          "E. ITEM DETAILS"
+        ],
+        "section_details": {
+          "invoice": {
+            "section_label": "A. INVOICE",
+            "fields": [
+              "1.S.NO",
+              "2.INVOICE NO. & DT.",
+              "3.PURCHASE ORDER NO & DT",
+              "4.LC NO & DATE",
+              "5.CONTRACT NO & DATE"
+            ]
+          },
+          "transacting_parties": {
+            "section_label": "B. TRANSACTING PARTIES",
+            "fields": [
+              "1.BUYER'S NAME & ADDRESS",
+              "2.SELLER'S NAME & ADDRESS",
+              "3.SUPPLIER NAME & ADDRESS",
+              "4.THIRD PARTY NAME & ADDRESS",
+              "5.AEO",
+              "6.AD CODE"
+            ]
+          },
+          "valuation": {
+            "section_label": "C. VALUATION",
+            "fields": [
+              "1.INV VALUE",
+              "2.FREIGHT",
+              "3.INSURANCE",
+              "4.HSS.",
+              "5.LOADING",
+              "6.COMMN",
+              "7.PAY TERMS",
+              "8.VALUATION METHOD",
+              "9.RELTD",
+              "10.SVB CH",
+              "11.SVB NO",
+              "12.DATE",
+              "13.LOA",
+              "14.Cur",
+              "15.Term"
+            ]
+          },
+          "cost_and_services": {
+            "section_label": "D. COST & SERVICES",
+            "fields": [
+              "1.C&B",
+              "2.CoC",
+              "3.CoP",
+              "4.HND CHG",
+              "5.G&S",
+              "6.DOC. CH",
+              "7.COO",
+              "8.R & LF",
+              "9.OTH COST",
+              "10.LD / ULD",
+              "11.WS",
+              "12.OTC",
+              "13.MISC CHARGE",
+              "14.ASS. VALUE"
+            ]
+          },
+          "item_details": {
+            "section_label": "E. ITEM DETAILS",
+            "fields": [
+              "1.S NO.",
+              "2.CTH",
+              "3.DESCRIPTION",
+              "4.UNIT PRICE",
+              "5.QUANTITY",
+              "6.UQC",
+              "7.AMOUNT"
+            ]
+          }
+        },
+        "glossary": {
+          "A": "LC - Letter of Credit",
+          "B": "AD - Authorized Dealer",
+          "C": "HSS - High Sea Sale",
+          "D_cost_services": {
+            "C&B": "Commission & Brokerage",
+            "CoC": "Cost of Container",
+            "CoP": "Cost of Packing",
+            "HND CHG": "Handling Charges",
+            "G&S": "Goods and Service input cost",
+            "DOC CH": "Document Charges",
+            "CoO": "Country of Origin Certificate",
+            "R&LF": "Royalty and Licence Fees",
+            "LD/ULD": "Loading Unloading Charges",
+            "WS": "Warranty Services",
+            "OTC": "Other Costs"
+          },
+          "E_item_details": {
+            "CTH": "Customs Tariff Head (8-digit HSN code)",
+            "UQC": "Unit Quantity Code"
+          }
+        }
+      }
+    }
+  }

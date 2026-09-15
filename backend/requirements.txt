@@ -1,0 +1,130 @@
+# IP Customs Vision - Requirements
+# Install with: pip install -r requirements.txt
+
+# =============================================================================
+# Core Dependencies
+# =============================================================================
+
+# FastAPI framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Data validation and ORM
+pydantic>=2.0
+email-validator>=2.0.0
+sqlalchemy>=2.0
+psycopg2-binary>=2.9.6
+
+# Environment and utilities
+python-dotenv>=1.0.0
+click>=8.0.0
+
+# Image processing
+Pillow>=10.0.0
+pillow-heif>=0.13.0
+opencv-python>=4.6.0
+numpy>=1.21.0
+
+# Document conversion
+python-docx>=0.8.11
+openpyxl>=3.1.0
+reportlab>=4.0.0
+
+# PDF processing
+PyMuPDF>=1.23.0
+pymupdf4llm>=0.2.0
+pdfplumber>=0.10.0
+pdf2image>=1.16.0
+
+# Schema validation
+jsonschema>=4.17.0
+
+# Authentication
+bcrypt>=4.0.0
+python-jose[cryptography]>=3.3.0
+
+# HTTP requests
+requests>=2.31.0
+
+# =============================================================================
+# LLM Providers
+# =============================================================================
+
+# OpenAI / Azure OpenAI
+openai>=1.0.0
+
+# Google Gemini
+google-generativeai>=0.3.0
+
+# Local models (NuExtract, etc.)
+transformers>=4.40.0
+accelerate>=0.25.0
+
+# PyTorch
+torch>=2.0.0
+torchvision>=0.15.0
+
+# =============================================================================
+# OCR Providers
+# =============================================================================
+
+# Mistral OCR
+mistralai>=1.0.0
+
+# Azure Document Intelligence
+azure-ai-documentintelligence>=1.0.0
+
+# Local barcode / QR decoding (optional soft-import; OpenCV QR used as fallback)
+zxing-cpp>=2.2.0
+
+#Azure Blob Storage
+azure-storage-blob>=12.19.0
+
+# Tesseract & EasyOCR
+pytesseract>=0.3.10
+easyocr>=1.7.0
+
+# Cloud OCR
+google-cloud-vision>=3.4.0
+boto3>=1.28.0
+
+# PaddleOCR
+paddlepaddle>=2.5.0
+paddleocr>=2.7.0
+
+# Surya OCR
+surya-ocr>=0.17.0
+
+# Marker OCR (includes Surya)
+marker-pdf>=1.10.0
+
+# =============================================================================
+# Multi-Agent Extraction Framework
+# =============================================================================
+
+# PydanticAI - Structured outputs with model-agnostic agents
+pydantic-ai>=0.1.0
+
+# =============================================================================
+# ML-Enhanced Document Segmentation
+# =============================================================================
+
+# Document fingerprinting for near-duplicate detection
+simhash>=2.1.2
+
+# TF-IDF vectorization and cosine similarity (likely already installed)
+scikit-learn>=1.3.0
+
+# MiniLM embeddings for semantic similarity (optional, better accuracy)
+sentence-transformers>=2.2.0
+
+# =============================================================================
+# Development (optional - uncomment if needed)
+# =============================================================================
+
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
+# black>=23.0.0
+# mypy>=1.0.0
+# ruff>=0.1.0

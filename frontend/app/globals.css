@@ -1,0 +1,512 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar — transparent track, thumb only */
+html {
+  scrollbar-color: hsl(var(--muted-foreground) / 0.35) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* PDF viewer styles */
+.react-pdf__Page {
+  margin-bottom: 1rem;
+  position: relative !important;
+}
+
+.react-pdf__Page__canvas {
+  display: block;
+}
+
+/* Ensure text layer aligns perfectly with canvas */
+.react-pdf__Page__textContent {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  overflow: hidden !important;
+  line-height: 1;
+}
+
+/* Hide PDF footer elements (Glossary, Page X of Y, Scan QR Code, SEZ UNIT Details) */
+/* The footer is typically in the bottom ~10-12% of the page */
+
+/* Container clips the bottom portion of PDF content */
+.pdf-page-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Remove default margin from react-pdf Page */
+.pdf-page-container .react-pdf__Page {
+  margin-bottom: 0 !important;
+}
+
+/* Ensure canvas is block to avoid inline spacing issues */
+.pdf-page-container .react-pdf__Page__canvas {
+  display: block;
+}
+
+/* JSON tree styles */
+.json-tree {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+/* ReactFlow styles */
+.react-flow__node {
+  font-size: 0.875rem;
+}
+
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+
+/* Thin scrollbars - light */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Thin scrollbars - dark (for dark backgrounds) */
+.dark-scrollbar::-webkit-scrollbar,
+.bg-neutral-900 .thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track,
+.bg-neutral-900 .thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb,
+.bg-neutral-900 .thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover,
+.bg-neutral-900 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Very thin scrollbars */
+.ultra-thin-scrollbar::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.ultra-thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ultra-thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* App Icon Animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+/* Pulse glow animation using box-shadow (doesn't get clipped) */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px hsl(var(--primary) / 0);
+  }
+}
+
+@keyframes pulse-glow-outer {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px hsl(var(--primary) / 0);
+  }
+}
+
+/* App icon container with continuous pulse glow */
+.app-icon-container {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.app-icon-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  animation: pulse-glow-outer 2s ease-in-out infinite;
+  animation-delay: 0.3s;
+  pointer-events: none;
+}
+
+/* AI Schema Generation Animations */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes float-up {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background-size: 200% 100%;
+  animation: gradient-x 3s ease-in-out infinite;
+}
+
+/* Sparkle burst animation */
+@keyframes sparkle-burst {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle-burst 1.5s ease-in-out infinite;
+}
+
+/* Magnetic pulse for AI button */
+@keyframes magnetic-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px hsl(var(--primary) / 0);
+  }
+}
+
+.animate-magnetic-pulse {
+  animation: magnetic-pulse 2s ease-in-out infinite;
+}
+
+/* AI Schema Generation - Floating particles */
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.5);
+    opacity: 0.8;
+  }
+}
+
+/* AI Schema Generation - Icon bounce */
+@keyframes icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* AI Schema Generation - Sparkle fade */
+@keyframes sparkle-fade {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+  }
+}
+
+/* AI Schema Generation - Gradient shift for text */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* AI Schema Generation - Slide up fade for messages */
+@keyframes slide-up-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* AI Schema Generation - Spin animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* AI Schema Generation - Pulse glow animation (override) */
+@keyframes ai-pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+/* AI Schema Generation - Orbit animation for dots */
+@keyframes orbit {
+  from {
+    transform: rotate(0deg) translateX(20px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(20px) rotate(-360deg);
+  }
+}
+
+/* =============================================================================
+   PDF Text Highlighting Styles
+   ============================================================================= */
+
+/* Highlight overlay boxes - border only, completely transparent background */
+.pdf-highlight-box,
+.pdf-highlight-box-active {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* Active/selected highlight box with subtle pulse */
+.pdf-highlight-box-active {
+  animation: pdf-highlight-box-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pdf-highlight-box-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Field row styles for extraction results */
+.field-row-highlightable {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.field-row-highlightable:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.field-row-highlightable::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 0.15s ease-in-out;
+  border-radius: 0 2px 2px 0;
+}
+
+.field-row-highlightable:hover::before {
+  background: rgba(59, 130, 246, 0.4);
+}
+
+.field-row-selected {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.field-row-selected::before {
+  background: #3b82f6 !important;
+}
+
+/* Highlight indicator dot - small and simple */
+.highlight-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.field-row-highlightable:hover .highlight-indicator {
+  transform: scale(1.2);
+}
+
+/* Copy button animations */
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes draw-check {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generic Document Extraction",
+  "description": "Universal schema for extracting common fields from any document",
+  "type": "object",
+  "properties": {
+    "document_title": {
+      "type": "string",
+      "description": "Title or heading of the document"
+    },
+    "document_date": {
+      "type": "string",
+      "description": "Date found on the document"
+    },
+    "document_number": {
+      "type": "string",
+      "description": "Any reference, invoice, or document number"
+    },
+    "issuer": {
+      "type": "object",
+      "description": "Organization or person who issued the document",
+      "properties": {
+        "name": {"type": "string"},
+        "address": {"type": "string"},
+        "contact": {"type": "string"}
+      }
+    },
+    "recipient": {
+      "type": "object",
+      "description": "Organization or person the document is addressed to",
+      "properties": {
+        "name": {"type": "string"},
+        "address": {"type": "string"},
+        "contact": {"type": "string"}
+      }
+    },
+    "amounts": {
+      "type": "object",
+      "description": "Financial amounts found in the document",
+      "properties": {
+        "total": {"type": "number"},
+        "subtotal": {"type": "number"},
+        "tax": {"type": "number"},
+        "currency": {"type": "string"}
+      }
+    },
+    "line_items": {
+      "type": "array",
+      "description": "List of items/entries if document is tabular",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {"type": "string"},
+          "quantity": {"type": "number"},
+          "unit_price": {"type": "number"},
+          "total": {"type": "number"}
+        }
+      }
+    },
+    "dates": {
+      "type": "object",
+      "description": "Important dates found in the document",
+      "properties": {
+        "issue_date": {"type": "string"},
+        "due_date": {"type": "string"},
+        "effective_date": {"type": "string"},
+        "expiry_date": {"type": "string"}
+      }
+    },
+    "identifiers": {
+      "type": "object",
+      "description": "Various identification numbers",
+      "properties": {
+        "reference_number": {"type": "string"},
+        "account_number": {"type": "string"},
+        "tax_id": {"type": "string"},
+        "registration_number": {"type": "string"}
+      }
+    },
+    "key_terms": {
+      "type": "array",
+      "description": "Important terms, conditions, or notes",
+      "items": {"type": "string"}
+    },
+    "signatures": {
+      "type": "array",
+      "description": "Signature information if present",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "title": {"type": "string"},
+          "date": {"type": "string"}
+        }
+      }
+    },
+    "raw_text_summary": {
+      "type": "string",
+      "description": "Brief summary of document content"
+    }
+  }
+}

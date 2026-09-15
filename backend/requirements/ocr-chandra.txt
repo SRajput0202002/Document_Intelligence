@@ -1,0 +1,7 @@
+# Chandra OCR Dependencies
+# Install with: pip install -r requirements/ocr-chandra.txt
+
+# PDF to image conversion
+pdf2image>=1.16.0
+
+# Note: pdfplumber is included in base.txt

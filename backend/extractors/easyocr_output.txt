@@ -1,0 +1,30 @@
+# OCR Output: EasyOCR
+# Model: easyocr-en
+# Pages: 1
+# Processing Time: 14.59s
+# Characters: 1510
+============================================================
+
+J5all AUgbBl oliaAl ,1 duauga FALCON GARDEN INSULATION CONT: EST: SPECIALIST IN WATER PROOFING AND FOAM CONCRETE AND COMBO FULL SYSTEM
+Falcon
+TAXINVOICE
+M/s. Havelock One Interiors Ltd TRN: 100316509700003 BILL TQ M/s. Havelock One Interiors Ltd- Abu Dhabi P.O Box: 30096, Abu Dhabi; U.A.E: PO REF: 202550539 Dated: 06-Oct-2025 Attn.= Mr: Ahamed-054 309 7631 PROJECT: Magic Planet Mirdif CC LOCATION: Dubai-UAE:,
+FALCON GARDEN INSULATION CONT: EST: TRN: 100024495200003 FGICE Reference: Tax Invoice: 25092 DATE:08/10/2025 PROJECT CODE:25041 Payment Due: Due
+QTY- M2
+SL. NO_
+DESCRIPTION
+Valve
+RATE
+AMOUNT (AED)
+Supply and Apply of Wet Area and Planter Box Waterproofing Works -Total Contract Value
+91,000.00
+LS
+1.00
+91,000.00
+B
+30% Advance Payment E
+27,300.00
+Amount Due (AED) Add: Vat (5%) Total Invoice Amount (AED)
+27,300.00 F 1,365.00 G 28,665.00 AMOUNT IN WORDS: Dirhams Twenty-Eight Thousand and Six Hundred Sixty-Five and Zero Fils Only: BANK DETAILS: Beneficiary Name: FALCON GARDEN INSULATION CONT: EST: Bank/ Branch: ABUDHABI COMMERCIAL BANK (ADCB)/ BUHAIRA BRANCH IBAN Number: AE650030012666354920001 Account Number: 12666354920001 Nl 3iwi 3 PO Box: 72379 Sharjah . UAE 5 ~alconGarded 'InsulAtiONco Y #tel Receiver Signature: Date: For M/S Falcon Garden Insulation Cont. Est:
+Since: 2007 (more than 15 + vears of experience) P.O. Box; 72379 Tel: 06-5349020 Mob: 050-4511772 050 4511833 Dubai -Sharjah-UAE Email: Sales@falconinsulation.ae Web: www.falconinsulation.ae
+IS0 9001:2015 JIAS BOSR CERTIFIEP

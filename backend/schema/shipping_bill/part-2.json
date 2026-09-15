@@ -1,0 +1,80 @@
+{
+  "shipping_bill_part_2": {
+    "type": "object",
+    "required": ["invoices"],
+    "description": "Part II - Invoice Details containing all invoice-specific information, transaction parties, valuation, and item-level details",
+    "x-section-structure": {
+      "section_label": "PART - II - INVOICE DETAILS",
+      "main_sections": [
+        "A. REFERENCE (REF)",
+        "B. TRANSACTION PARTIES",
+        "C. VALUATION DETAILS (VAL DTLS)",
+        "D. ITEM DETAILS"
+      ],
+      "section_details": {
+        "reference": {
+          "section_label": "A. REFERENCE (REF)",
+          "fields": [
+            "1.S.No",
+            "2.INVOICE No. & Dt.",
+            "3.P.O.No. & Dt.",
+            "4.LoC No. & Dt",
+            "5.Contract No.&Dt",
+            "6.AD code",
+            "7.INVTERM"
+          ]
+        },
+        "transaction_parties": {
+          "section_label": "B. TRANSACTION PARTIES",
+          "fields": [
+            "1.EXPORTER'S NAME & ADDRESS",
+            "2.BUYER'S NAME & ADDRESS",
+            "3.THIRD PARTY NAME & ADDRESS",
+            "4.BUYER AEO STATUS"
+          ]
+        },
+        "valuation_details": {
+          "section_label": "C. VALUATION DETAILS (VAL DTLS)",
+          "fields": [
+            "1.INVOICE VALUE",
+            "2.FOB VALUE",
+            "3.FREIGHT",
+            "4.INSURANCE",
+            "5.DISCOUNT",
+            "6.COMMISON",
+            "7.DEDUCT",
+            "8.P/C",
+            "9.EXCHANGE RATE"
+          ]
+        },
+        "item_details": {
+          "section_label": "D. ITEM DETAILS",
+          "fields": [
+            "1.ItemSNo",
+            "2.HS CD",
+            "3.DESCRIPTION",
+            "4.QUANTITY",
+            "5.UQC",
+            "6.RATE",
+            "7.VALUE(F/C)"
+          ]
+        },
+        "glossary": {
+          "section_label": "GLOSSARY",
+          "terms": [
+            "A: Ref - Reference",
+            "P.O. - Purchase Order",
+            "LoC - Letter of Credit",
+            "AD - Authorised Dealer",
+            "C: VAL DTLS - Valuation Details",
+            "FOB - Freight On Board",
+            "DEDUCT - Deduction",
+            "P/C - Packing Charge",
+            "D: HS CD - Harmonized System Code",
+            "UQC - Unit Quantity Code"
+          ]
+        }
+      }
+    }
+  }
+}

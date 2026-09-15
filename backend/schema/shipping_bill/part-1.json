@@ -1,0 +1,177 @@
+{
+  "part_1_shipping_bill_summary": {
+    "type": "object",
+    "description": "Part I - Shipping Bill Summary containing all primary sections for customs declaration",
+    "x-section-structure": {
+      "section_label": "PART - I - SHIPPING BILL SUMMARY",
+      "main_sections": [
+        "A. STATUS",
+        "B. DECLARAN DETAILS",
+        "C. VALUE SUMMARY",
+        "D. EXPORT PROMOTIONS",
+        "E. MANIFEST DETAILS",
+        "F. INVOICE SUMMARY",
+        "G. EQUIPMENT DETAILS",
+        "H. CHALLAN DETAILS",
+        "I. ANNEX DETAILS",
+        "J. PROCESS DETAILS"
+      ],
+      "section_details": {
+        "status": {
+          "section_label": "A. STATUS",
+          "fields": [
+            "1.MODE",
+            "2.ASSESS",
+            "3.EXMN",
+            "4.JOBBING",
+            "5.MEIS",
+            "6.DBK",
+            "7.RODTP",
+            "7.ROSL",
+            "8.LICENCE",
+            "8.DEEC/DFIA",
+            "9.DFRC",
+            "10.RE-EXP",
+            "11.LUT",
+            "12.PORT OF LOADING",
+            "13.COUNTRY OF FINAL DESTINATION",
+            "14.STATE OF ORIGIN",
+            "15.PORT OF FINAL DESTINATION",
+            "16.PORT OF DISCHARGE",
+            "17.COUNTRY OF DISCHARGE"
+          ]
+        },
+        "declaran": {
+          "section_label": "B. DECLARAN DETAILS",
+          "fields": [
+            "1.EXPORTER'S NAME & ADDRESS",
+            "2.Type",
+            "3.AD CODE",
+            "4.RBI WAIVER NO.& DT",
+            "5.CB NAME",
+            "6.AEO",
+            "7.CONSIGNEE NAME & ADDRESS",
+            "8.GSTIN / TYPE",
+            "9.FOREX BANK A/C NO.",
+            "10.DBK BANK A/C NO.",
+            "11.IFSC NO."
+          ]
+        },
+        "value_summary": {
+          "section_label": "C. VALUE SUMMARY",
+          "fields": [
+            "1.FOB VALUE",
+            "2.FREIGHT",
+            "3.INSURANCE",
+            "4.DISCOUNT",
+            "5.COMMISSION",
+            "6.DEDUCTIONS",
+            "7.P/C (PACKING CHARGES)",
+            "8.DUTY",
+            "9.CESS"
+          ]
+        },
+        "export_promotions": {
+          "section_label": "D. EXPORT PROMOTIONS",
+          "fields": [
+            "1.DBK CLAIM",
+            "2.IGST AMT",
+            "3.CESS AMT",
+            "4.IGST VALUE",
+            "5.RODTEP AMT",
+            "6.ROSCTL AMT"
+          ]
+        },
+        "manifest_details": {
+          "section_label": "E. MANIFEST DETAILS",
+          "fields": [
+            "1.MAWB NO.",
+            "2.MAWB DT",
+            "3.HAWB NO.",
+            "4.HAWB DT",
+            "N.O.C.",
+            "4.CIN NO.",
+            "5.CIN DT.",
+            "6.CIN SITE ID"
+          ]
+        },
+        "invoice_summary": {
+          "section_label": "F. INVOICE SUMMARY",
+          "fields": [
+            "1.SNO",
+            "2.INV NO.",
+            "3.INV AMT.",
+            "4.CURRENCY"
+          ]
+        },
+        "equipment_details": {
+          "section_label": "G. EQUIPMENT DETAILS",
+          "fields": [
+            "1.CONTAINER",
+            "2.SEAL",
+            "3.DATE",
+            "4.S No"
+          ]
+        },
+        "challan_details": {
+          "section_label": "H. CHALLAN DETAILS",
+          "fields": [
+            "1.SR.NO",
+            "2.CHALLAN NO",
+            "3.PAYMT DT",
+            "4.AMOUNT"
+          ]
+        },
+        "annex_details": {
+          "section_label": "I. ANNEX DETAILS",
+          "fields": [
+            "1.SEAL TYPE",
+            "2.NATURE OF CARGO",
+            "3.NO. OF PACKETS",
+            "4.NO. OF CONTAINERS",
+            "5.LOOSE PACKETS",
+            "6.MARKS & NUMBERS"
+          ]
+        },
+        "process_details": {
+          "section_label": "J. PROCESS DETAILS",
+          "fields": [
+            "1.EVENT",
+            "2.DATE",
+            "3.TIME",
+            "4.LEO NO.",
+            "6.LEO Date.",
+            "8.BRC Realisation Date"
+          ],
+          "event_types": [
+            "5.Submission",
+            "5.Assessment",
+            "7.Examination",
+            "9.LEO"
+          ],
+          "note": "This is a nested table structure. Events have separate numbering (5, 5, 7, 9) from the right-side fields (1-4, 6, 8)"
+        },
+        "sez_unit_details": {
+          "section_label": "10. SEZ UNIT Details",
+          "fields": []
+        },
+        "digital_signature": {
+          "section_label": "DIGITAL SIGNATURE",
+          "fields": [
+            "Signature Status",
+            "Digitally signed by",
+            "Date",
+            "Reason",
+            "Location"
+          ]
+        },
+        "glossary": {
+          "section_label": "GLOSSARY",
+          "fields": [
+            "Glossary Terms and Definitions"
+          ]
+        }
+      }
+    }
+  }
+}

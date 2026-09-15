@@ -1,0 +1,27 @@
+{
+    "part_6_declaration": {
+      "type": "object",
+      "description": "Part VI - Declaration containing declaration statements and authorized signatory details",
+      "x-section-structure": {
+        "main_sections": [
+          "A. DECLARATION STATEMENT",
+          "B. AUTHORIZED SIGNATORY"
+        ],
+        "section_details": {
+          "declaration_statement": {
+            "section_label": "A. DECLARATION STATEMENT",
+            "fields": []
+          },
+          "authorized_signatory": {
+            "section_label": "B. AUTHORIZED SIGNATORY",
+            "fields": [
+              "CHA NAME",
+              "DATE",
+              "PLACE",
+              "AUTHORISED SIGNATORY"
+            ]
+          }
+        }
+      }
+    }
+  }

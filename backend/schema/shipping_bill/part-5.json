@@ -1,0 +1,34 @@
+{
+  "part_5_declarations": {
+    "type": "object",
+    "required": ["declaration_statement", "authorized_signatory"],
+    "description": "Part V - Declarations containing declaration statements and authorized signatory details for the shipping bill",
+    "x-section-structure": {
+      "section_label": "PART - V - DECLARATIONS",
+      "main_sections": [
+        "A. DECLARATION STATEMENT",
+        "B. AUTHORIZED SIGNATORY"
+      ],
+      "section_details": {
+        "declaration_statement": {
+          "section_label": "A. DECLARATION STATEMENT",
+          "description": "Large text area for declaration statement content. This is where the exporter/customs broker declares the accuracy and completeness of the information provided in the shipping bill.",
+          "fields": [
+            "DECLARATION TEXT (Free-form text area)"
+          ],
+          "note": "This section typically contains standard legal declarations affirming the truthfulness of the information provided, compliance with export regulations, and acceptance of penalties for false declarations."
+        },
+        "authorized_signatory": {
+          "section_label": "B. AUTHORIZED SIGNATORY",
+          "fields": [
+            "DATE",
+            "PLACE",
+            "AUTHORIZED SIGNATORY",
+            "CHA NAME"
+          ],
+          "note": "CHA - Customs House Agent/Customs Broker"
+        }
+      }
+    }
+  }
+}

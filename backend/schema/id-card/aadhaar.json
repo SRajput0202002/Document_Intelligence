@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aadhaar Card",
+  "description": "Schema for extracting data from Indian Aadhaar cards",
+  "type": "object",
+  "properties": {
+    "aadhaar_number": {
+      "type": "string",
+      "description": "12-digit Aadhaar number (may be masked as XXXX XXXX 1234)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Full name as printed on card"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "description": "Date of birth (DD/MM/YYYY format)"
+    },
+    "year_of_birth": {
+      "type": "string",
+      "description": "Year of birth if full DOB not available"
+    },
+    "gender": {
+      "type": "string",
+      "description": "Gender (Male/Female/Transgender)"
+    },
+    "address": {
+      "type": "object",
+      "description": "Full address",
+      "properties": {
+        "house_number": { "type": "string" },
+        "street": { "type": "string" },
+        "locality": { "type": "string" },
+        "landmark": { "type": "string" },
+        "village_town_city": { "type": "string" },
+        "district": { "type": "string" },
+        "state": { "type": "string" },
+        "pincode": { "type": "string" }
+      }
+    },
+    "full_address": {
+      "type": "string",
+      "description": "Complete address as single string"
+    },
+    "father_name": {
+      "type": "string",
+      "description": "Father's name (S/O)"
+    },
+    "husband_name": {
+      "type": "string",
+      "description": "Husband's name (W/O)"
+    },
+    "mother_name": {
+      "type": "string",
+      "description": "Mother's name"
+    },
+    "issue_date": {
+      "type": "string",
+      "description": "Card issue date"
+    },
+    "vid": {
+      "type": "string",
+      "description": "Virtual ID if present"
+    }
+  },
+  "required": ["aadhaar_number", "name"]
+}

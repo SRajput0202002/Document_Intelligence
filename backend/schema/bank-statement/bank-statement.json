@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bank Statement",
+  "description": "Schema for extracting data from bank account statements",
+  "type": "object",
+  "properties": {
+    "bank_name": {
+      "type": "string",
+      "description": "Name of the bank"
+    },
+    "branch": {
+      "type": "string",
+      "description": "Branch name and address"
+    },
+    "account_holder_name": {
+      "type": "string",
+      "description": "Name of account holder"
+    },
+    "account_number": {
+      "type": "string",
+      "description": "Bank account number"
+    },
+    "account_type": {
+      "type": "string",
+      "description": "Type of account (Savings, Current, etc.)"
+    },
+    "ifsc_code": {
+      "type": "string",
+      "description": "IFSC code of branch"
+    },
+    "statement_period": {
+      "type": "object",
+      "description": "Period covered by the statement",
+      "properties": {
+        "from_date": { "type": "string", "description": "Start date" },
+        "to_date": { "type": "string", "description": "End date" }
+      }
+    },
+    "opening_balance": {
+      "type": "number",
+      "description": "Balance at start of period"
+    },
+    "closing_balance": {
+      "type": "number",
+      "description": "Balance at end of period"
+    },
+    "total_credits": {
+      "type": "number",
+      "description": "Total amount credited"
+    },
+    "total_debits": {
+      "type": "number",
+      "description": "Total amount debited"
+    },
+    "transactions": {
+      "type": "array",
+      "description": "List of transactions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "description": "Transaction date" },
+          "value_date": { "type": "string", "description": "Value date" },
+          "description": { "type": "string", "description": "Transaction description" },
+          "reference": { "type": "string", "description": "Reference number" },
+          "debit": { "type": "number", "description": "Debit amount" },
+          "credit": { "type": "number", "description": "Credit amount" },
+          "balance": { "type": "number", "description": "Running balance" },
+          "type": { "type": "string", "description": "Transaction type (NEFT, IMPS, UPI, etc.)" }
+        }
+      }
+    },
+    "currency": {
+      "type": "string",
+      "description": "Currency code"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Customer ID"
+    },
+    "address": {
+      "type": "string",
+      "description": "Account holder's address"
+    }
+  },
+  "required": ["bank_name", "account_number", "opening_balance", "closing_balance"]
+}

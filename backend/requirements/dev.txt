@@ -1,0 +1,15 @@
+# Development Dependencies
+# Install with: pip install -r requirements/dev.txt
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Code formatting
+black>=23.0.0
+
+# Type checking
+mypy>=1.0.0
+
+# Linting
+ruff>=0.1.0
