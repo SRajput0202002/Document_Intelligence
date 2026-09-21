@@ -240,7 +240,7 @@ export default function SettingsPage() {
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { value: "pattern", label: "Pattern", description: "Fast keyword matching" },
-                  { value: "gpt-4o", label: "GPT-4o", description: "OpenAI high accuracy" },
+                  { value: "gpt-5.5", label: "GPT-5.5", description: "Azure OpenAI high accuracy" },
                   { value: "gemini", label: "Gemini", description: "Google AI" },
                   { value: "mistral", label: "Mistral", description: "Mistral AI" },
                   { value: "custom", label: "Custom", description: "Custom classifier", beta: true },

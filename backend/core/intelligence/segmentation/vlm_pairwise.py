@@ -252,14 +252,20 @@ def _call_one_pair_sync(
     classify_pages: bool,
     expected_types: Optional[List[str]],
 ) -> Tuple[PairVLMResult, int]:
+    from core.utils.azure_chat import chat_completion_kwargs
+
     content = _pair_user_content(b64_a, b64_b, page_a, page_b, classify_pages, expected_types)
-    max_tok = 420 if classify_pages else 128
+    # GPT-5.x needs headroom for reasoning + JSON; GPT-4o uses the same budget via max_tokens.
+    max_tok = 2048 if classify_pages else 1024
     response = client.chat.completions.create(
-        model=deployment,
-        messages=[{"role": "user", "content": content}],
-        response_format={"type": "json_object"},
-        temperature=0.1,
-        max_tokens=max_tok,
+        **chat_completion_kwargs(
+            model=deployment,
+            messages=[{"role": "user", "content": content}],
+            response_format={"type": "json_object"},
+            temperature=0.1,
+            max_tokens=max_tok,
+            reasoning_effort="none",
+        )
     )
     tokens = 0
     if response.usage:
@@ -280,15 +286,20 @@ async def _call_one_pair(
     classify_pages: bool,
     expected_types: Optional[List[str]],
 ) -> Tuple[PairVLMResult, int]:
+    from core.utils.azure_chat import chat_completion_kwargs
+
     content = _pair_user_content(b64_a, b64_b, page_a, page_b, classify_pages, expected_types)
-    max_tok = 420 if classify_pages else 128
+    max_tok = 2048 if classify_pages else 1024
     async with sem:
         response = await client.chat.completions.create(
-            model=deployment,
-            messages=[{"role": "user", "content": content}],
-            response_format={"type": "json_object"},
-            temperature=0.1,
-            max_tokens=max_tok,
+            **chat_completion_kwargs(
+                model=deployment,
+                messages=[{"role": "user", "content": content}],
+                response_format={"type": "json_object"},
+                temperature=0.1,
+                max_tokens=max_tok,
+                reasoning_effort="none",
+            )
         )
     tokens = 0
     if response.usage:
@@ -550,14 +561,12 @@ def detect_boundaries_vlm_pairwise_blocking(
     max_pages = _env_int("SEGMENTATION_VLM_MAX_PAGES", DEFAULT_VLM_MAX_PAGES)
     max_conc = _env_int("SEGMENTATION_VLM_MAX_CONCURRENT", DEFAULT_VLM_MAX_CONCURRENT)
 
+    from core.utils.azure_chat import get_azure_api_version, get_segmentation_vlm_deployment
+
     api_key = os.getenv("AZURE_OPENAI_API_KEY")
     endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    deployment = (
-        os.getenv("SEGMENTATION_VLM_DEPLOYMENT")
-        or os.getenv("AZURE_OPENAI_DEPLOYMENT")
-        or "gpt-4o-mini"
-    )
-    api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+    deployment = get_segmentation_vlm_deployment()
+    api_version = get_azure_api_version()
 
     meta: Dict[str, Any] = {
         "dpi": dpi,
@@ -675,7 +684,7 @@ async def detect_boundaries_vlm_pairwise_async(
 
     Environment:
         AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT — required
-        AZURE_OPENAI_API_VERSION — default 2024-08-01-preview
+        AZURE_OPENAI_API_VERSION — default 2025-04-01-preview
         SEGMENTATION_VLM_DEPLOYMENT — vision deployment name (falls back to AZURE_OPENAI_DEPLOYMENT)
         SEGMENTATION_VLM_DPI — default 200
         SEGMENTATION_VLM_MAX_PAGES — skip if document has more pages (default 30)
@@ -685,14 +694,12 @@ async def detect_boundaries_vlm_pairwise_async(
     max_pages = _env_int("SEGMENTATION_VLM_MAX_PAGES", DEFAULT_VLM_MAX_PAGES)
     max_conc = _env_int("SEGMENTATION_VLM_MAX_CONCURRENT", DEFAULT_VLM_MAX_CONCURRENT)
 
+    from core.utils.azure_chat import get_azure_api_version, get_segmentation_vlm_deployment
+
     api_key = os.getenv("AZURE_OPENAI_API_KEY")
     endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    deployment = (
-        os.getenv("SEGMENTATION_VLM_DEPLOYMENT")
-        or os.getenv("AZURE_OPENAI_DEPLOYMENT")
-        or "gpt-4o-mini"
-    )
-    api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+    deployment = get_segmentation_vlm_deployment()
+    api_version = get_azure_api_version()
 
     meta: Dict[str, Any] = {
         "dpi": dpi,

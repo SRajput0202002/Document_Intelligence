@@ -563,7 +563,7 @@ class DocumentTypeDetector:
         try:
             if classifier == "gemini":
                 return self._call_gemini(prompt)
-            elif classifier == "gpt-4o":
+            elif classifier in ("gpt-5.5", "gpt-4o"):
                 return self._call_openai(prompt)
             elif classifier == "mistral":
                 return self._call_mistral(prompt)
@@ -627,17 +627,22 @@ class DocumentTypeDetector:
             return None
 
     def _call_openai(self, prompt: str) -> Optional[Dict]:
-        """Call Azure OpenAI GPT-4o for classification."""
+        """Call Azure OpenAI for classification (GPT-5.5 / GPT-4o compatible)."""
         import json
         import os
 
         try:
             from openai import AzureOpenAI
+            from core.utils.azure_chat import (
+                chat_completion_kwargs,
+                get_azure_api_version,
+                get_azure_deployment,
+            )
 
             api_key = os.getenv("AZURE_OPENAI_API_KEY")
             endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-            deployment = os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o")
-            api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+            deployment = get_azure_deployment()
+            api_version = get_azure_api_version()
 
             if not api_key or not endpoint:
                 logger.warning("Azure OpenAI credentials not found (AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT)")
@@ -650,10 +655,14 @@ class DocumentTypeDetector:
             )
 
             response = client.chat.completions.create(
-                model=deployment,
-                messages=[{"role": "user", "content": prompt}],
-                response_format={"type": "json_object"},
-                temperature=0.1,
+                **chat_completion_kwargs(
+                    model=deployment,
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format={"type": "json_object"},
+                    temperature=0.1,
+                    max_tokens=4096,
+                    reasoning_effort="none",
+                )
             )
 
             return json.loads(response.choices[0].message.content)
@@ -670,7 +679,10 @@ class DocumentTypeDetector:
         import os
 
         try:
-            from mistralai import Mistral
+            try:
+                from mistralai import Mistral
+            except ImportError:
+                from mistralai.client import Mistral
 
             api_key = os.getenv("MISTRAL_API_KEY")
             if not api_key:

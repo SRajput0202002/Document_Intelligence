@@ -1930,7 +1930,7 @@ export default function ExtractPage() {
                         <ScanText className="w-4 h-4 text-primary animate-pulse" />
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        Detecting with {classifier === "pere-custom-classifier" ? "Custom" : classifier === "gpt-4o" ? "GPT-4o" : classifier.charAt(0).toUpperCase() + classifier.slice(1)}...
+                        Detecting with {classifier === "pere-custom-classifier" ? "Custom" : (classifier === "gpt-5.5" || classifier === "gpt-4o") ? "GPT-5.5" : classifier.charAt(0).toUpperCase() + classifier.slice(1)}...
                       </span>
                     </div>
                   ) : detectedType && (

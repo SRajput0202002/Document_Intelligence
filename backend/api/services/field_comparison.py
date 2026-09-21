@@ -2,7 +2,8 @@
 LLM soft-match field comparison between two document field maps.
 
 Standalone — no jobs, DB, or storage. Uses Azure OpenAI from env
-(AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_MINI_DEPLOYMENT).
+(AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_MINI_DEPLOYMENT;
+falls back to AZURE_OPENAI_DEPLOYMENT / gpt-5.5).
 """
 
 from __future__ import annotations
@@ -100,10 +101,12 @@ Return JSON only:
 
 
 def _azure_client():
+    from core.utils.azure_chat import get_azure_api_version, get_azure_mini_deployment
+
     api_key = os.getenv("AZURE_OPENAI_API_KEY", "")
     endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
-    deployment = os.getenv("AZURE_OPENAI_MINI_DEPLOYMENT", "gpt-4o-mini")
-    api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+    deployment = get_azure_mini_deployment()
+    api_version = get_azure_api_version()
 
     if not api_key or not endpoint:
         raise RuntimeError(
@@ -124,20 +127,26 @@ def _azure_client():
 
 
 def _call_azure_completion(prompt: str) -> str:
+    from core.utils.azure_chat import chat_completion_kwargs
+
     client, deployment = _azure_client()
     response = client.chat.completions.create(
-        model=deployment,
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful assistant that compares field values "
-                    "and returns structured JSON."
-                ),
-            },
-            {"role": "user", "content": prompt},
-        ],
-        temperature=0.0,
+        **chat_completion_kwargs(
+            model=deployment,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are a helpful assistant that compares field values "
+                        "and returns structured JSON."
+                    ),
+                },
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.0,
+            max_tokens=2048,
+            reasoning_effort="none",
+        )
     )
     return (response.choices[0].message.content or "").strip()
 

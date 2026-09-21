@@ -117,18 +117,18 @@ def generate_uuid():
 DEFAULT_USER_SETTINGS = {
     # Document Classification & Schema Generation Settings
     # Note: document_classifier is also used for automatic schema inference
-    "document_classifier": "gpt-4o",  # gemini, gpt-4o, mistral, pattern, custom (also used for schema generation)
+    "document_classifier": "gpt-5.5",  # gpt-5.5 / gpt-4o (alias) → azure_openai; also gemini, mistral, pattern, custom
     "pdf_extractor": "pymupdf4llm",   # pymupdf4llm, pymupdf, pdfplumber, pypdf
-    "fallback_ocr": "mistral",        # mistral, paddle, azure, marker, surya (also used for schema inference OCR)
+    "fallback_ocr": "azure_doc_intelligence",  # primary OCR fallback for scanned docs / schema inference
     "min_text_threshold": 50,         # Minimum chars before falling back to OCR
 
     # Default Extraction Providers
-    "default_ocr_provider": "mistral",
-    "default_llm_provider": "azure_openai",  # GPT-4o for extraction
+    "default_ocr_provider": "azure_doc_intelligence",
+    "default_llm_provider": "azure_openai",
 
     # Consensus Extraction Settings
     "consensus_enabled": False,
-    "consensus_ocr_providers": ["mistral", "paddle"],
+    "consensus_ocr_providers": ["azure_doc_intelligence", "paddle"],
     "consensus_llm_providers": ["nuextract", "gemini"],
     "consensus_threshold": 0.6,
 

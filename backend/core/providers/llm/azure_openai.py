@@ -1,7 +1,7 @@
 """
 Azure OpenAI LLM adapter.
 
-Uses Azure OpenAI for cloud-based LLM inference with GPT-4o.
+Uses Azure OpenAI for cloud-based LLM inference (GPT-5.5 / GPT-4o compatible).
 """
 
 import logging
@@ -14,6 +14,15 @@ from typing import Optional, Dict, Any
 from ...base.models import ProviderInfo, ProviderType, CostTier, ExtractionResult
 from ...base.llm_extractor import BaseLLMExtractor, LLMExtractorMixin
 from ...registry import ProviderRegistry
+from ...utils.azure_chat import (
+    DEFAULT_DEPLOYMENT,
+    DEFAULT_MINI_DEPLOYMENT,
+    chat_completion_kwargs,
+    get_azure_api_version,
+    get_azure_deployment,
+    get_azure_mini_deployment,
+    is_reasoning_model,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,13 +37,19 @@ class AzureOpenAIConfig:
         default_factory=lambda: os.getenv("AZURE_OPENAI_ENDPOINT", "")
     )
     deployment: str = field(
-        default_factory=lambda: os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o")
+        default_factory=get_azure_deployment
     )
     api_version: str = field(
-        default_factory=lambda: os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+        default_factory=get_azure_api_version
     )
+    # Used only for non-reasoning (e.g. GPT-4o) deployments.
     temperature: float = 0.0
-    max_tokens: int = 16384
+    # Mapped to max_completion_tokens on GPT-5.x.
+    max_tokens: int = 32768
+    # GPT-5.x only; ignored for GPT-4o. Override via AZURE_OPENAI_REASONING_EFFORT.
+    reasoning_effort: Optional[str] = field(
+        default_factory=lambda: os.getenv("AZURE_OPENAI_REASONING_EFFORT", "low")
+    )
 
 
 class AzureOpenAIAdapter(BaseLLMExtractor, LLMExtractorMixin):
@@ -42,7 +57,7 @@ class AzureOpenAIAdapter(BaseLLMExtractor, LLMExtractorMixin):
     Adapter for Azure OpenAI.
 
     Features:
-        - Cloud-based LLM using Azure OpenAI (GPT-4o)
+        - Cloud-based LLM using Azure OpenAI (GPT-5.5 / GPT-4o)
         - High accuracy extraction
         - JSON mode support
         - Detailed part-specific instructions
@@ -141,14 +156,17 @@ Output ONLY valid JSON matching the requested format. No explanations or markdow
                 user_prompt = user_template.format(text=text)
 
             response = client.chat.completions.create(
-                model=self._config.deployment,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=self._config.temperature,
-                max_tokens=self._config.max_tokens,
-                response_format={"type": "json_object"},
+                **chat_completion_kwargs(
+                    model=self._config.deployment,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    temperature=self._config.temperature,
+                    max_tokens=self._config.max_tokens,
+                    response_format={"type": "json_object"},
+                    reasoning_effort=self._config.reasoning_effort,
+                )
             )
 
             raw_output = response.choices[0].message.content
@@ -213,6 +231,7 @@ Output ONLY valid JSON matching the requested format. No explanations or markdow
         """Get Azure OpenAI provider information."""
         api_key = os.environ.get("AZURE_OPENAI_API_KEY", "")
         endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT", "")
+        deployment = get_azure_deployment()
         is_available = bool(api_key and endpoint)
         error = None
         if not api_key:
@@ -220,10 +239,12 @@ Output ONLY valid JSON matching the requested format. No explanations or markdow
         elif not endpoint:
             error = "AZURE_OPENAI_ENDPOINT not set"
 
+        model_label = "GPT-5.5" if is_reasoning_model(deployment) else deployment or "GPT-5.5"
+
         return ProviderInfo(
             name="azure_openai",
-            display_name="Azure OpenAI (GPT-4o)",
-            description="Cloud LLM using Azure OpenAI GPT-4o. High accuracy with JSON mode support.",
+            display_name=f"Azure OpenAI ({model_label})",
+            description=f"Cloud LLM using Azure OpenAI {model_label}. High accuracy with JSON mode support.",
             provider_type=ProviderType.CLOUD,
             cost_tier=CostTier.MEDIUM,
             requires_api_key=True,
@@ -239,13 +260,13 @@ Output ONLY valid JSON matching the requested format. No explanations or markdow
             config_options={
                 "deployment": {
                     "type": "string",
-                    "default": "gpt-4o",
+                    "default": DEFAULT_DEPLOYMENT,
                     "description": "Azure OpenAI deployment name",
                 },
-                "temperature": {
-                    "type": "number",
-                    "default": 0,
-                    "description": "Temperature for generation",
+                "reasoning_effort": {
+                    "type": "string",
+                    "default": "low",
+                    "description": "GPT-5.x reasoning effort (none|low|medium|high); ignored on GPT-4o",
                 },
             },
         )
@@ -265,32 +286,33 @@ ProviderRegistry.register_llm_provider(
 
 
 # =============================================================================
-# GPT-4o-mini Registration (same adapter, different default deployment)
+# Mini / cost-efficient registration (same adapter, different default deployment)
 # =============================================================================
 
 def _get_config_mini():
-    """Factory function for GPT-4o-mini - returns config with mini deployment."""
+    """Factory for mini deployment (falls back to main / gpt-5.5)."""
     return AzureOpenAIConfig(
         api_key=os.getenv("AZURE_OPENAI_API_KEY", ""),
         endpoint=os.getenv("AZURE_OPENAI_ENDPOINT", ""),
-        deployment=os.getenv("AZURE_OPENAI_MINI_DEPLOYMENT", "gpt-4o-mini"),
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview"),
+        deployment=get_azure_mini_deployment(),
+        api_version=get_azure_api_version(),
         temperature=0.0,
-        max_tokens=16384,
+        max_tokens=32768,
+        reasoning_effort=os.getenv("AZURE_OPENAI_REASONING_EFFORT", "low"),
     )
 
 
 class AzureOpenAIMiniAdapter(AzureOpenAIAdapter):
     """
-    GPT-4o-mini variant - inherits all functionality from AzureOpenAIAdapter.
-    Only difference: provider metadata for UI display.
+    Mini / cost-efficient variant — same adapter, different deployment defaults.
     """
-    
+
     @classmethod
     def get_provider_info(cls) -> ProviderInfo:
-        """Provider info for GPT-4o-mini."""
+        """Provider info for mini Azure OpenAI deployment."""
         api_key = os.environ.get("AZURE_OPENAI_API_KEY", "")
         endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT", "")
+        deployment = get_azure_mini_deployment()
         is_available = bool(api_key and endpoint)
         error = None
         if not api_key:
@@ -298,10 +320,12 @@ class AzureOpenAIMiniAdapter(AzureOpenAIAdapter):
         elif not endpoint:
             error = "AZURE_OPENAI_ENDPOINT not set"
 
+        model_label = deployment or DEFAULT_MINI_DEPLOYMENT
+
         return ProviderInfo(
             name="azure_openai_mini",
-            display_name="Azure OpenAI (GPT-4o-mini)",
-            description="Cloud LLM using Azure OpenAI GPT-4o-mini. Faster and more cost-effective than GPT-4o.",
+            display_name=f"Azure OpenAI ({model_label})",
+            description=f"Cloud LLM using Azure OpenAI {model_label}. Faster / lower-cost deployment when configured.",
             provider_type=ProviderType.CLOUD,
             cost_tier=CostTier.LOW,
             requires_api_key=True,
@@ -317,19 +341,18 @@ class AzureOpenAIMiniAdapter(AzureOpenAIAdapter):
             config_options={
                 "deployment": {
                     "type": "string",
-                    "default": "gpt-4o-mini",
-                    "description": "Azure OpenAI deployment name for GPT-4o-mini",
+                    "default": DEFAULT_MINI_DEPLOYMENT,
+                    "description": "Azure OpenAI mini / cost-efficient deployment name",
                 },
-                "temperature": {
-                    "type": "number",
-                    "default": 0,
-                    "description": "Temperature for generation",
+                "reasoning_effort": {
+                    "type": "string",
+                    "default": "low",
+                    "description": "GPT-5.x reasoning effort (none|low|medium|high); ignored on GPT-4o",
                 },
             },
         )
 
 
-# Register GPT-4o-mini
 ProviderRegistry.register_llm_provider(
     "azure_openai_mini",
     AzureOpenAIMiniAdapter,

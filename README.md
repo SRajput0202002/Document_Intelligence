@@ -5,7 +5,7 @@
 ## Features
 
 - **Multiple OCR Providers**: Mistral, Azure Document Intelligence, PaddleOCR, Marker, Surya, Tesseract, EasyOCR, Google Vision, AWS Textract
-- **Multiple LLM Extractors**: Azure OpenAI (GPT-4o), Gemini, OpenAI, Mistral, NuExtract (local)
+- **Multiple LLM Extractors**: Azure OpenAI (GPT-5.5), Gemini, OpenAI, Mistral, NuExtract (local)
 - **Document Segmentation**: Intelligent multi-document detection and splitting with ML-enhanced boundaries
 - **Multi-Agent Extraction**: Specialized agents for complex document structures
 - **Visual Workflow Builder**: Drag-and-drop workflow creation with ReactFlow
@@ -55,8 +55,10 @@ AZURE_STORAGE_DOCUMENTS_CONTAINER=idp-docstore
 # Azure OpenAI (REQUIRED for extraction)
 AZURE_OPENAI_API_KEY=your_key
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_DEPLOYMENT=gpt-4o
-AZURE_OPENAI_MINI_DEPLOYMENT=gpt-4o-mini
+AZURE_OPENAI_DEPLOYMENT=gpt-5.5
+AZURE_OPENAI_MINI_DEPLOYMENT=gpt-5.5
+# AZURE_OPENAI_API_VERSION=2025-04-01-preview
+# AZURE_OPENAI_REASONING_EFFORT=low
 
 # Mistral OCR (REQUIRED)
 MISTRAL_API_KEY=your_key

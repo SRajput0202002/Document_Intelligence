@@ -33,7 +33,7 @@ router = APIRouter()
 class UserSettings(BaseModel):
     """User settings model with all configurable options."""
     # Document Classification Settings
-    document_classifier: Optional[str] = None  # gemini, gpt-4o, mistral, pattern, custom
+    document_classifier: Optional[str] = None  # gemini, gpt-5.5, mistral, pattern, custom
     pdf_extractor: Optional[str] = None        # pymupdf4llm, pymupdf, pdfplumber, pypdf
     fallback_ocr: Optional[str] = None         # mistral, paddle, azure, marker, surya
     min_text_threshold: Optional[int] = None   # Minimum chars before falling back to OCR
@@ -262,7 +262,8 @@ async def debug_current_settings(
         "critical_for_schema_inference": {
             "document_classifier": effective_settings.get("document_classifier", DEFAULT_USER_SETTINGS["document_classifier"]),
             "mapped_llm_provider": {
-                "gpt-4o": "azure_openai",
+                "gpt-5.5": "azure_openai",
+                "gpt-4o": "azure_openai",  # legacy alias
                 "gemini": "gemini",
                 "mistral": "mistral_chat",
             }.get(
@@ -330,7 +331,7 @@ async def get_settings_options(db: Session = Depends(get_db)):
 
     return {
         "document_classifier": {
-            "options": ["pattern", "gpt-4o", "gemini", "mistral", "custom"],
+            "options": ["pattern", "gpt-5.5", "gemini", "mistral", "custom"],
             "description": "AI model for document type detection and schema generation",
             "default": DEFAULT_USER_SETTINGS["document_classifier"],
             "note": "This model is also used for automatic schema inference",

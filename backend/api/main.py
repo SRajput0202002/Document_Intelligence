@@ -115,8 +115,13 @@ async def lifespan(app: FastAPI):
         default_user = get_or_create_default_user(db)
         current_settings = default_user.settings or {}
 
-        # Log current settings for debugging
-        logger.info(f"Default user settings: document_classifier={current_settings.get('document_classifier')}")
+        # Log current settings for debugging (classifier id + actual Azure deployment)
+        from core.utils.azure_chat import get_azure_deployment
+        logger.info(
+            "Default user settings: document_classifier=%s (Azure deployment=%s)",
+            current_settings.get("document_classifier"),
+            get_azure_deployment(),
+        )
 
         # Check if settings need updating with new default keys
         needs_update = False

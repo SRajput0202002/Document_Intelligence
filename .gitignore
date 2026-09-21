@@ -11,6 +11,7 @@ backend/.venv/
 
 # Data folder - ignore everything including .db files
 backend/data/
+backend/docs/
 
 # =============================================================================
 # Frontend

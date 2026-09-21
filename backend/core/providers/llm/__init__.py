@@ -7,7 +7,7 @@ to conform to the BaseLLMExtractor interface.
 Available providers:
     - nuextract: NuExtract model (local, free)
     - ollama: Ollama/Llama (local, free)
-    - azure_openai: Azure OpenAI GPT-4o (cloud)
+    - azure_openai: Azure OpenAI GPT-5.5 (cloud)
     - mistral_chat: Mistral Chat API (cloud)
     - gemini: Google Gemini Vision (cloud)
 """

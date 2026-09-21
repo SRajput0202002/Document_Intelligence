@@ -1,5 +1,5 @@
 """
-Financial document classification using Azure OpenAI GPT-4o-mini.
+Financial document classification using Azure OpenAI (GPT-5.5 / vision-capable deployment).
 
 Output labels: invoice, proforma_invoice, unknown_document (first-page rules in prompts).
 
@@ -7,7 +7,8 @@ Classification path (temporary):
 - **Vision only:** page 1 is rendered to JPEG and classified with the vision model.
 - Text-based classification is **disabled** (see ``classify_financial_document_hybrid``).
 
-Uses AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_MINI_DEPLOYMENT (default gpt-4o-mini).
+Uses AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_MINI_DEPLOYMENT
+(falls back to AZURE_OPENAI_DEPLOYMENT / gpt-5.5).
 """
 
 from __future__ import annotations
@@ -93,10 +94,12 @@ def render_first_page_jpeg_base64(pdf_path: str, dpi: int | None = None) -> str:
 
 
 def _azure_client():
+    from core.utils.azure_chat import get_azure_api_version, get_azure_mini_deployment
+
     api_key = os.getenv("AZURE_OPENAI_API_KEY", "")
     endpoint = os.getenv("AZURE_OPENAI_ENDPOINT", "")
-    deployment = os.getenv("AZURE_OPENAI_MINI_DEPLOYMENT", "gpt-4o-mini")
-    api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-08-01-preview")
+    deployment = get_azure_mini_deployment()
+    api_version = get_azure_api_version()
 
     if not api_key or not endpoint:
         raise RuntimeError(
@@ -116,7 +119,7 @@ def _azure_client():
     # INFO so it appears under default LOG_LEVEL; use DEBUG for quieter runs
     logger.info(
         "Document classifier: Azure OpenAI deployment=%r api_version=%r "
-        "(AZURE_OPENAI_MINI_DEPLOYMENT or default gpt-4o-mini)",
+        "(AZURE_OPENAI_MINI_DEPLOYMENT or AZURE_OPENAI_DEPLOYMENT)",
         deployment,
         api_version,
     )
@@ -284,11 +287,17 @@ def classify_financial_document_azure_gpt4o_mini(document_text: str) -> Dict[str
 
     prompt = _CLASS_PROMPT_TEXT.format(text=document_text[:14_000])
 
+    from core.utils.azure_chat import chat_completion_kwargs
+
     response = client.chat.completions.create(
-        model=deployment,
-        messages=[{"role": "user", "content": prompt}],
-        response_format={"type": "json_object"},
-        temperature=0.0,
+        **chat_completion_kwargs(
+            model=deployment,
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"},
+            temperature=0.0,
+            max_tokens=4096,
+            reasoning_effort="none",
+        )
     )
 
     raw = response.choices[0].message.content
@@ -317,12 +326,17 @@ def classify_financial_document_azure_gpt4o_mini_vision(jpeg_base64: str) -> Dic
         },
     ]
 
+    from core.utils.azure_chat import chat_completion_kwargs
+
     response = client.chat.completions.create(
-        model=deployment,
-        messages=[{"role": "user", "content": content}],
-        response_format={"type": "json_object"},
-        temperature=0.0,
-        max_tokens=500,
+        **chat_completion_kwargs(
+            model=deployment,
+            messages=[{"role": "user", "content": content}],
+            response_format={"type": "json_object"},
+            temperature=0.0,
+            max_tokens=2048,
+            reasoning_effort="none",
+        )
     )
 
     raw = response.choices[0].message.content
@@ -442,12 +456,17 @@ def classify_batelco_document_azure_gpt4o_mini_vision(jpeg_base64: str) -> Dict[
         },
     ]
 
+    from core.utils.azure_chat import chat_completion_kwargs
+
     response = client.chat.completions.create(
-        model=deployment,
-        messages=[{"role": "user", "content": content}],
-        response_format={"type": "json_object"},
-        temperature=0.0,
-        max_tokens=300,
+        **chat_completion_kwargs(
+            model=deployment,
+            messages=[{"role": "user", "content": content}],
+            response_format={"type": "json_object"},
+            temperature=0.0,
+            max_tokens=2048,
+            reasoning_effort="none",
+        )
     )
 
     raw = response.choices[0].message.content

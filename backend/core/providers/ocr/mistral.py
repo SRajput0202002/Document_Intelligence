@@ -65,7 +65,10 @@ class MistralOCRAdapter(BaseOCRProcessor):
         """Lazy load the Mistral client."""
         if self._client is None:
             try:
-                from mistralai import Mistral
+                try:
+                    from mistralai import Mistral
+                except ImportError:
+                    from mistralai.client import Mistral
                 self._client = Mistral(api_key=self._config.api_key)
             except ImportError as e:
                 raise RuntimeError(

@@ -293,8 +293,8 @@ def _validate_and_convert_document(
 class ExtractionRequest(BaseModel):
     """Request model for starting extraction."""
     doc_type: Optional[str] = None  # Optional - will auto-detect if not provided
-    ocr_provider: str = "mistral"
-    llm_provider: str = "azure_openai"  # Changed from nuextract to gpt-4o
+    ocr_provider: str = "azure_doc_intelligence"
+    llm_provider: str = "azure_openai"
     schema_id: Optional[str] = None
     auto_detect: bool = True  # Auto-detect document type
     auto_schema: bool = True  # Auto-generate schema if not provided
@@ -1371,7 +1371,7 @@ async def delete_job(
 @router.post("/detect-type", response_model=DocumentTypeResponse)
 async def detect_document_type(
     file: UploadFile = File(...),
-    classifier: Optional[str] = Form(None),  # pattern, gpt-4o, mistral, gemini, custom - uses settings if not provided
+    classifier: Optional[str] = Form(None),  # pattern, gpt-5.5, mistral, gemini, custom - uses settings if not provided
     pdf_extractor: Optional[str] = Form(None),  # pymupdf4llm, pymupdf, pdfplumber, pypdf - uses settings if not provided
     fallback_ocr: Optional[str] = Form(None),  # OCR provider for fallback - uses settings if not provided
     min_text_threshold: Optional[int] = Form(None),  # Min chars before OCR fallback - uses settings if not provided
@@ -1389,7 +1389,7 @@ async def detect_document_type(
 
     Classifiers:
     - pattern: Fast keyword-based pattern matching
-    - gpt-4o: OpenAI GPT-4o for high accuracy classification
+    - gpt-5.5: Azure OpenAI (deployment from AZURE_OPENAI_DEPLOYMENT) for high accuracy classification
     - mistral: Mistral AI for document classification
     - gemini: Google Gemini for document classification
     - custom: Custom trained classifier (placeholder)
@@ -1426,9 +1426,9 @@ async def detect_document_type(
     settings = {**DEFAULT_USER_SETTINGS, **(user.settings or {})}
 
     # Use provided values or fall back to user settings
-    effective_classifier = classifier or settings.get("document_classifier", "gpt-4o")
+    effective_classifier = classifier or settings.get("document_classifier", "gpt-5.5")
     effective_pdf_extractor = pdf_extractor or settings.get("pdf_extractor", "pymupdf4llm")
-    effective_fallback_ocr = fallback_ocr or settings.get("fallback_ocr", "mistral")
+    effective_fallback_ocr = fallback_ocr or settings.get("fallback_ocr", "azure_doc_intelligence")
     effective_min_threshold = min_text_threshold if min_text_threshold is not None else settings.get("min_text_threshold", 50)
 
     temp_id = str(uuid.uuid4())
@@ -1807,11 +1807,12 @@ async def infer_document_schema(
     # Map classifier names to LLM provider names
     # Document Classifier is used for BOTH document type detection AND schema inference
     classifier_to_llm = {
-        "gpt-4o": "azure_openai",
+        "gpt-5.5": "azure_openai",
+        "gpt-4o": "azure_openai",  # legacy alias
         "gemini": "gemini",
         "mistral": "mistral_chat",
         "pattern": None,  # No LLM needed for pattern-based
-        "custom": "azure_openai",  # Default to GPT-4o for custom
+        "custom": "azure_openai",
     }
 
     # Use provided values or fall back to user settings (NO hardcoded defaults)
@@ -3755,7 +3756,7 @@ def try_resolve_workflow_extraction_cache_hits(
 
 class ConsensusExtractionRequest(BaseModel):
     """Request for consensus extraction with multiple providers."""
-    ocr_providers: List[str] = ["mistral", "paddle_ocr"]
+    ocr_providers: List[str] = ["azure_doc_intelligence", "paddle_ocr"]
     llm_providers: List[str] = ["nuextract", "gemini"]
     schema_id: Optional[str] = None
     consensus_threshold: float = 0.6
@@ -4141,7 +4142,7 @@ async def analyze_segments(
                         f"default_detection_method={profile_default_detection_method!r}")
 
     # Determine effective OCR provider: profile > request > user settings
-    effective_ocr_provider = profile_ocr_method or ocr_provider or settings.get("default_ocr_provider", "mistral")
+    effective_ocr_provider = profile_ocr_method or ocr_provider or settings.get("default_ocr_provider", "azure_doc_intelligence")
     logger.info(f"Effective OCR provider: {effective_ocr_provider}")
 
     parsed_ocr_model_config: Optional[Dict[str, Any]] = None
