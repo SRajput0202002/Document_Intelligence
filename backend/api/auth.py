@@ -2,6 +2,7 @@
 Authentication utilities for the API.
 
 Provides password hashing and JWT token management.
+Supports dual-path auth: Entra ID (Azure AD) first when enabled, then local JWT.
 """
 
 import os
@@ -108,18 +109,8 @@ def authenticate_user(db: Session, username: str, password: str) -> Optional[Use
     return user
 
 
-async def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
-    db: Session = Depends(get_db),
-) -> Optional[User]:
-    """
-    Get the current authenticated user from the JWT token.
-    Returns None if no token is provided (allows unauthenticated access).
-    """
-    if not credentials:
-        return None
-
-    token = credentials.credentials
+def _user_from_local_jwt(db: Session, token: str) -> Optional[User]:
+    """Resolve an active user from a local HS256 JWT (with password-version check)."""
     payload = decode_token(token)
     if not payload:
         return None
@@ -138,15 +129,69 @@ async def get_current_user(
     return user
 
 
+async def _user_from_azure_token(db: Session, token: str) -> Optional[User]:
+    """Resolve (or JIT-create) a user from an Entra access token when enabled."""
+    from .auth_azure import (
+        get_or_create_user_from_azure,
+        is_azure_ad_enabled,
+        validate_azure_token,
+    )
+
+    if not is_azure_ad_enabled():
+        return None
+
+    claims = validate_azure_token(token)
+    if not claims:
+        return None
+
+    user = get_or_create_user_from_azure(db, claims)
+    if not user or not user.is_active:
+        return None
+    return user
+
+
+async def get_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    db: Session = Depends(get_db),
+) -> Optional[User]:
+    """
+    Get the current authenticated user from the Bearer token.
+    Tries Entra ID first when enabled, then local JWT.
+    Returns None if no token is provided or both paths fail.
+    """
+    if not credentials:
+        return None
+
+    token = credentials.credentials
+
+    try:
+        azure_user = await _user_from_azure_token(db, token)
+        if azure_user:
+            return azure_user
+    except Exception as exc:
+        logger.debug("Azure auth path failed, trying local JWT: %s", exc)
+
+    return _user_from_local_jwt(db, token)
+
+
 async def get_current_user_required(
     credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
     db: Session = Depends(get_db),
 ) -> User:
     """
     Get the current authenticated user (required).
+    Tries Entra ID first when enabled, then local JWT.
     Raises 401 if not authenticated.
     """
     token = credentials.credentials
+
+    try:
+        azure_user = await _user_from_azure_token(db, token)
+        if azure_user:
+            return azure_user
+    except Exception as exc:
+        logger.debug("Azure auth path failed, trying local JWT: %s", exc)
+
     payload = decode_token(token)
     if not payload:
         raise HTTPException(

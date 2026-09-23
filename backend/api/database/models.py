@@ -180,6 +180,10 @@ class User(Base):
     password_version = Column(Integer, nullable=False, default=0)
     role = Column(String(20), nullable=False, default=UserRole.VIEWER.value)
 
+    # Entra ID / Azure AD (nullable for local-only users)
+    azure_oid = Column(String(64), nullable=True, unique=True)
+    auth_provider = Column(String(20), nullable=False, default="local")  # local | azure_ad
+
     # All configurable settings stored as JSONB
     settings = Column(JSON, nullable=False, default=lambda: DEFAULT_USER_SETTINGS.copy())
 
@@ -199,6 +203,7 @@ class User(Base):
         Index("idx_users_username", "username"),
         Index("idx_users_email", "email"),
         Index("idx_users_role", "role"),
+        Index("idx_users_azure_oid", "azure_oid"),
     )
 
     def to_dict(self, include_sensitive: bool = False):
@@ -209,6 +214,7 @@ class User(Base):
             "email": self.email,
             "display_name": self.display_name,
             "role": self.role,
+            "auth_provider": self.auth_provider or "local",
             "settings": self.settings or DEFAULT_USER_SETTINGS.copy(),
             "is_active": self.is_active,
             "created_at": ist_isoformat(self.created_at) if self.created_at else None,
@@ -217,6 +223,7 @@ class User(Base):
         }
         if include_sensitive:
             data["has_password"] = bool(self.password_hash)
+            data["azure_oid"] = self.azure_oid
         return data
 
     def get_setting(self, key: str, default=None):

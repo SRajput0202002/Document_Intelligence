@@ -62,6 +62,32 @@ def run_migrations():
                 )
                 conn.commit()
 
+            if "azure_oid" not in users_columns:
+                logger.info("Adding azure_oid column to users table")
+                conn.execute(text("ALTER TABLE users ADD COLUMN azure_oid VARCHAR(64)"))
+                conn.execute(
+                    text(
+                        "CREATE UNIQUE INDEX IF NOT EXISTS idx_users_azure_oid "
+                        "ON users (azure_oid) WHERE azure_oid IS NOT NULL"
+                    )
+                )
+                conn.commit()
+
+            if "azure_email" in users_columns:
+                logger.info("Dropping azure_email column from users table")
+                conn.execute(text("ALTER TABLE users DROP COLUMN IF EXISTS azure_email"))
+                conn.commit()
+
+            if "auth_provider" not in users_columns:
+                logger.info("Adding auth_provider column to users table")
+                conn.execute(
+                    text(
+                        "ALTER TABLE users ADD COLUMN auth_provider VARCHAR(20) "
+                        "NOT NULL DEFAULT 'local'"
+                    )
+                )
+                conn.commit()
+
     # Schemas table migrations
     if "schemas" in table_names:
         # Get existing columns in schemas table

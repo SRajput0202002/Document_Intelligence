@@ -12,11 +12,12 @@ import { LockIcon } from "@/components/ui/lock";
 import { UserIcon } from "@/components/ui/user";
 
 export default function LoginPage() {
-  const { login, isLoading } = useAuth();
+  const { login, loginWithMicrosoft, microsoftAuthEnabled, isLoading } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [msSubmitting, setMsSubmitting] = useState(false);
   const [sessionMessage, setSessionMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,6 +53,18 @@ export default function LoginPage() {
     }
   };
 
+  const handleMicrosoftSignIn = async () => {
+    setError("");
+    setMsSubmitting(true);
+    try {
+      await loginWithMicrosoft();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Microsoft sign-in failed");
+      setMsSubmitting(false);
+    }
+    // On success, redirect navigates away — keep button loading if still mounted briefly
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center bg-background">
@@ -59,6 +72,8 @@ export default function LoginPage() {
       </div>
     );
   }
+
+  const busy = submitting || msSubmitting;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -114,7 +129,7 @@ export default function LoginPage() {
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  disabled={submitting}
+                  disabled={busy}
                   required
                   autoComplete="username"
                   autoFocus
@@ -132,7 +147,7 @@ export default function LoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  disabled={submitting}
+                  disabled={busy}
                   required
                   autoComplete="current-password"
                 />
@@ -141,7 +156,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={submitting || !username || !password}
+                disabled={busy || !username || !password}
               >
                 {submitting ? (
                   <>
@@ -153,6 +168,35 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
+
+            {microsoftAuthEnabled && (
+              <div className="mt-4 space-y-4">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card px-2 text-muted-foreground">Or</span>
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  disabled={busy}
+                  onClick={handleMicrosoftSignIn}
+                >
+                  {msSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Redirecting...
+                    </>
+                  ) : (
+                    "Sign in with Microsoft"
+                  )}
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
