@@ -185,7 +185,7 @@ class AzureDocIntelligenceAdapter(BaseOCRProcessor):
 
         Args:
             config: Optional configuration dict with:
-                - model: str - Model to use (default: "prebuilt-read")
+                - model: str - Model to use (default: "prebuilt-layout")
                 - endpoint: str - Azure endpoint URL
                 - api_key: str - Azure API key
         """
@@ -201,7 +201,7 @@ class AzureDocIntelligenceAdapter(BaseOCRProcessor):
             "api_key",
             os.getenv("AZURE_DOC_INTELLIGENCE_KEY", "")
         )
-        self._model = self._config.get("model", AzureDocModel.PREBUILT_READ.value)
+        self._model = self._config.get("model", AzureDocModel.PREBUILT_LAYOUT.value)
 
         super().__init__(config)
 
@@ -617,7 +617,7 @@ class AzureDocIntelligenceAdapter(BaseOCRProcessor):
             config_options={
                 "model": {
                     "type": "string",
-                    "default": "prebuilt-read",
+                    "default": "prebuilt-layout",
                     "description": "Model to use (prebuilt-read, prebuilt-layout, prebuilt-invoice, etc.)",
                     "options": [
                         {"value": "prebuilt-read", "label": "Read"},
@@ -676,7 +676,7 @@ def _get_config():
     return {
         "endpoint": os.getenv("AZURE_DOC_INTELLIGENCE_ENDPOINT", ""),
         "api_key": os.getenv("AZURE_DOC_INTELLIGENCE_KEY", ""),
-        "model": "prebuilt-read",
+        "model": "prebuilt-layout",
     }
 
 

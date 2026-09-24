@@ -407,6 +407,37 @@ export default function ExtractPage() {
     }
   }, [availableOcrProviders, availableLlmProviders, userSettings, ocrProvider, llmProvider]);
 
+  // Keep model configuration valid when the OCR provider changes. This also
+  // materializes provider defaults (for example, ADI's prebuilt-layout model)
+  // so stale model state from another provider cannot be submitted.
+  useEffect(() => {
+    if (!ocrProvider) return;
+
+    const selectedProvider = providers?.ocr_providers?.find(
+      (provider) => provider.name === ocrProvider
+    );
+    const modelConfig = selectedProvider?.config_options?.model as
+      | { default?: string; options?: Array<{ value: string }> }
+      | undefined;
+    const modelOptions = modelConfig?.options;
+
+    setOcrModelConfig((current) => {
+      if (!modelOptions?.length) {
+        return Object.keys(current).length > 0 ? {} : current;
+      }
+
+      const currentModel = current.model;
+      if (
+        typeof currentModel === "string" &&
+        modelOptions.some((option) => option.value === currentModel)
+      ) {
+        return current;
+      }
+
+      return modelConfig?.default ? { model: modelConfig.default } : {};
+    });
+  }, [ocrProvider, providers?.ocr_providers]);
+
   // Track pipeline stage based on extraction progress
   useEffect(() => {
     // Reset to idle when not processing
@@ -718,6 +749,7 @@ export default function ExtractPage() {
     setFile(null);
     setSelectedSchema(null);
     setOcrProvider("");
+    setOcrModelConfig({});
     setLlmProvider("");
     setCurrentStep("upload");
     setDetectedType(null);

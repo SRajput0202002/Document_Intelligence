@@ -3101,7 +3101,7 @@ def _azure_di_model_id_from_config(ocr_model_config: Optional[Dict[str, Any]]) -
 def _expected_azure_di_cache_model(ocr_model_config: Optional[Dict[str, Any]]) -> str:
     """Value stored on DocumentCache.ocr_model / OCRResult.model for Azure DI (e.g. azure-prebuilt-layout)."""
     mid = _azure_di_model_id_from_config(ocr_model_config)
-    return f"azure-{mid or 'prebuilt-read'}"
+    return f"azure-{mid or 'prebuilt-layout'}"
 
 
 def _ocr_process_pdf(
