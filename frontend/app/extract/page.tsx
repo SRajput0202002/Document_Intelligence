@@ -773,19 +773,49 @@ export default function ExtractPage() {
     return ["upload", "schema", "config", "processing"];
   };
 
+  /** Leave inline schema builder and return to multi-doc segment assignment. */
+  const returnToSegmentsFromSchemaCreate = () => {
+    setIsCreatingSchema(false);
+    setInferredFields([]);
+    setInferredSchemaName("");
+    setInferredDocType("");
+    setCurrentStep("segments");
+  };
+
   // Navigate to previous step
   const handleGoBack = () => {
+    // Multi-doc Create Schema is a side path off "segments" (not in step order)
+    if (enableSegmentation && currentStep === "schema") {
+      returnToSegmentsFromSchemaCreate();
+      return;
+    }
+
     const stepOrder = getStepOrder();
     const currentIndex = stepOrder.indexOf(currentStep);
     if (currentIndex > 0) {
       // Don't go back from processing (extraction in progress)
       if (currentStep === "processing" && (isExtracting || segmentedJobId)) return;
+      if (currentStep === "schema") {
+        setIsCreatingSchema(false);
+      }
       setCurrentStep(stepOrder[currentIndex - 1]);
     }
   };
 
   // Navigate to a specific step (only if it's a previous/completed step)
   const handleStepClick = (stepId: Step) => {
+    // From multi-doc schema create side path, only allow returning to segments/upload
+    if (enableSegmentation && currentStep === "schema") {
+      if (stepId === "upload") {
+        handleReset();
+        return;
+      }
+      if (stepId === "segments") {
+        returnToSegmentsFromSchemaCreate();
+      }
+      return;
+    }
+
     const stepOrder = getStepOrder();
     const targetIndex = stepOrder.indexOf(stepId);
     const currentIndex = stepOrder.indexOf(currentStep);
@@ -844,7 +874,10 @@ export default function ExtractPage() {
         { id: "processing", label: "Process" },
       ];
 
-  const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+  // While creating a schema from multi-doc, keep the stepper on "segments"
+  const currentStepIndex = enableSegmentation && currentStep === "schema"
+    ? steps.findIndex((s) => s.id === "segments")
+    : steps.findIndex((s) => s.id === currentStep);
 
   // Fetch recent jobs for dashboard
   const { data: recentJobsData } = useQuery({
@@ -1352,7 +1385,10 @@ export default function ExtractPage() {
               variant="outline"
               size="icon"
               onClick={handleGoBack}
-              disabled={currentStepIndex === 0 || (currentStep === "processing" && (isExtracting || !!segmentedJobId))}
+              disabled={
+                (currentStepIndex <= 0 && !(enableSegmentation && currentStep === "schema")) ||
+                (currentStep === "processing" && (isExtracting || !!segmentedJobId))
+              }
               className="h-8 w-8"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -1918,16 +1954,41 @@ export default function ExtractPage() {
                         description || "Custom extraction schema"
                       );
 
-                      // Refetch schemas and select the new one
+                      // Refetch schemas list
                       await queryClient.invalidateQueries({ queryKey: ["schemas"] });
-                      setSelectedSchema(schema);
-                      setIsCreatingSchema(false);
-                      setCurrentStep("config");
+
+                      if (enableSegmentation) {
+                        // Multi-doc: assign to the segment currently previewed, then
+                        // return to the segments list so other schemas can be created.
+                        const activeSegment = segmentationResult?.segments.find(
+                          (s) =>
+                            s.page_start === segmentPreviewPage ||
+                            (segmentPreviewPage >= s.page_start &&
+                              segmentPreviewPage <= s.page_end)
+                        );
+                        if (activeSegment) {
+                          setSegmentSchemas((prev) => ({
+                            ...prev,
+                            [activeSegment.index]: schema.id,
+                          }));
+                        }
+                        returnToSegmentsFromSchemaCreate();
+                      } else {
+                        setSelectedSchema(schema);
+                        setIsCreatingSchema(false);
+                        setCurrentStep("config");
+                      }
                     } catch (error) {
                       console.error("Failed to create schema:", error);
                     }
                   }}
-                  onCancel={() => setIsCreatingSchema(false)}
+                  onCancel={() => {
+                    if (enableSegmentation) {
+                      returnToSegmentsFromSchemaCreate();
+                    } else {
+                      setIsCreatingSchema(false);
+                    }
+                  }}
                 />
               </div>
             ) : (
