@@ -1,4 +1,3 @@
-git diff
 """
 Mistral Chat LLM adapter.
 

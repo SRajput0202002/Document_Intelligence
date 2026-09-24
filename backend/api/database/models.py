@@ -150,7 +150,6 @@ class UserRole(str, Enum):
     """User role enum."""
     ADMIN = "admin"
     CONTRIBUTOR = "contributor"
-    VIEWER = "viewer"
 
 
 class User(Base):
@@ -178,7 +177,7 @@ class User(Base):
     password_hash = Column(String(255), nullable=True)
     # Bumped on password change/reset; must match JWT claim `pv` for the token to stay valid.
     password_version = Column(Integer, nullable=False, default=0)
-    role = Column(String(20), nullable=False, default=UserRole.VIEWER.value)
+    role = Column(String(20), nullable=False, default=UserRole.CONTRIBUTOR.value)
 
     # Entra ID / Azure AD (nullable for local-only users)
     azure_oid = Column(String(64), nullable=True, unique=True)

@@ -140,7 +140,8 @@ def _map_azure_roles_to_app_role(azure_roles: List[str]) -> str:
         return UserRole.ADMIN.value
     if role_set & {"Contributor", "Idp.Contributor"}:
         return UserRole.CONTRIBUTOR.value
-    return UserRole.VIEWER.value
+    # Default app role when Entra token has no matching app roles
+    return UserRole.CONTRIBUTOR.value
 
 
 def _unique_username(db: Session, email: Optional[str], azure_oid: str) -> str:
@@ -170,7 +171,7 @@ def get_or_create_user_from_azure(db: Session, claims: Dict[str, Any]) -> Option
     """
     JIT provision or link a user from Azure AD claims.
 
-    Match order: azure_oid → email. Creates viewer (or mapped role) if new.
+    Match order: azure_oid → email. Creates contributor (or mapped role) if new.
     """
     azure_oid = claims.get("oid")
     email = (

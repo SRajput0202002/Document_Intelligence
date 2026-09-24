@@ -448,7 +448,7 @@ export interface User {
   username: string;
   email?: string;
   display_name?: string;
-  role: "admin" | "contributor" | "viewer";
+  role: "admin" | "contributor";
   settings: UserSettings;
   is_active: boolean;
   created_at?: string;

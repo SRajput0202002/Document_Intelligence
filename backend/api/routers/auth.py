@@ -52,7 +52,7 @@ class RegisterRequest(BaseModel):
     password: str
     email: Optional[EmailStr] = None
     display_name: Optional[str] = None
-    role: Optional[str] = "viewer"
+    role: Optional[str] = "contributor"
 
 
 class ChangePasswordRequest(BaseModel):

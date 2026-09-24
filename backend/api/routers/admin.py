@@ -37,7 +37,7 @@ class CreateUserRequest(BaseModel):
     password: str
     email: Optional[EmailStr] = None
     display_name: Optional[str] = None
-    role: str = "viewer"
+    role: str = "contributor"
 
 
 class UpdateUserRequest(BaseModel):
@@ -496,7 +496,6 @@ async def get_available_roles(
         "roles": [
             {"value": UserRole.ADMIN.value, "label": "Admin", "description": "Full access to all features"},
             {"value": UserRole.CONTRIBUTOR.value, "label": "Contributor", "description": "Can create and manage jobs"},
-            {"value": UserRole.VIEWER.value, "label": "Viewer", "description": "Read-only access"},
         ]
     }
 

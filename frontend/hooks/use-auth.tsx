@@ -29,7 +29,7 @@ export interface User {
   username: string;
   email?: string;
   display_name?: string;
-  role: "admin" | "contributor" | "viewer";
+  role: "admin" | "contributor";
   auth_provider?: "local" | "azure_ad" | string;
   is_active: boolean;
   created_at?: string;

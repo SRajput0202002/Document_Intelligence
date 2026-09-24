@@ -152,7 +152,7 @@ export default function AdminPage() {
     password: "",
     email: "",
     display_name: "",
-    role: "viewer",
+    role: "contributor",
   });
   const [editUser, setEditUser] = useState({
     email: "",
@@ -242,7 +242,7 @@ export default function AdminPage() {
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "stats"] });
       setCreateDialogOpen(false);
-      setNewUser({ username: "", password: "", email: "", display_name: "", role: "viewer" });
+      setNewUser({ username: "", password: "", email: "", display_name: "", role: "contributor" });
       toast({ title: "User created", description: "New user has been created successfully." });
     },
     onError: (error: Error) => {
