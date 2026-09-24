@@ -3,7 +3,7 @@ import * as path from "path";
 import * as fs from "fs";
 
 const PAGES = [
-  { path: "/", name: "home" },
+  { path: "/extract", name: "extract" },
   { path: "/jobs", name: "jobs" },
   { path: "/schemas", name: "schemas" },
   { path: "/providers", name: "providers" },

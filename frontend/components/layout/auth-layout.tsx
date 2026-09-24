@@ -35,9 +35,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       return;
     }
 
-    // If authenticated and trying to access login/setup, redirect to home
+    // If authenticated and trying to access login/setup, redirect to extract
     if (isAuthenticated && isPublicPath) {
-      router.push("/");
+      router.push("/extract");
       return;
     }
   }, [isLoading, isAuthenticated, setupRequired, pathname, router, isPublicPath]);

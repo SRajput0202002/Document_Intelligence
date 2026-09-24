@@ -48,7 +48,7 @@ interface DesignReviewReport {
 }
 
 const PAGES_TO_REVIEW = [
-  { name: 'Home / Extract', path: '/' },
+  { name: 'Home / Extract', path: '/extract' },
   { name: 'Jobs', path: '/jobs' },
   { name: 'Schemas', path: '/schemas' },
   { name: 'Providers', path: '/providers' },

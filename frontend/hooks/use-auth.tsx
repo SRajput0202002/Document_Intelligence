@@ -150,9 +150,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 if (ok) {
                   microsoftHandled = true;
                   if (justReturnedFromEntra) {
-                    router.replace(consumeAuthReturnTo("/"));
+                    router.replace(consumeAuthReturnTo("/extract"));
                   } else if (pathname === "/login" || pathname === "/setup") {
-                    router.replace(consumeAuthReturnTo("/"));
+                    router.replace(consumeAuthReturnTo("/extract"));
                   }
                 }
               }
@@ -203,7 +203,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setToken(data.access_token);
     setUser(data.user);
 
-    router.push("/");
+    router.push("/extract");
   }, [router]);
 
   // Microsoft / Entra login (redirect)
@@ -212,7 +212,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw new Error("Microsoft sign-in is not configured.");
     }
     try {
-      const account = await loginWithMicrosoftRedirect("/");
+      const account = await loginWithMicrosoftRedirect("/extract");
       if (account) {
         const accessToken = await acquireMicrosoftAccessToken(account);
         if (!accessToken) {
@@ -222,7 +222,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (!ok) {
           throw new Error("Microsoft token was rejected by the API.");
         }
-        router.push(consumeAuthReturnTo("/"));
+        router.push(consumeAuthReturnTo("/extract"));
       }
       // If null, loginRedirect navigated away — nothing else to do
     } catch (error) {
@@ -264,7 +264,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(data.user);
     setSetupRequired(false);
 
-    router.push("/");
+    router.push("/extract");
   }, [router]);
 
   // Logout

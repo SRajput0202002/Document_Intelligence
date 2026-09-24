@@ -290,7 +290,7 @@ export default function WorkflowsPage() {
             Expose document extraction as API endpoints for external systems
           </p>
         </div>
-        <Link href="/">
+        <Link href="/extract">
           <Button>
             <Plus className="w-4 h-4 mr-2" />
             New Extraction
@@ -342,7 +342,7 @@ export default function WorkflowsPage() {
             <p className="text-muted-foreground text-center mb-4 max-w-md">
               Run an extraction on the Extract page, then use &quot;Save as Workflow&quot; to expose it as an API endpoint
             </p>
-            <Link href="/">
+            <Link href="/extract">
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
                 Start Extraction

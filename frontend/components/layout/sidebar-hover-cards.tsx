@@ -290,7 +290,7 @@ export function ExtractHoverContent() {
         </div>
       </div>
       <Link
-        href="/"
+        href="/extract"
         className="block text-xs text-primary hover:underline pt-2 mt-1 border-t"
       >
         Start extraction

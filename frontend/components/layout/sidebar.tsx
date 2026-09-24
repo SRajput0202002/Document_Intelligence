@@ -72,7 +72,7 @@ interface NavItem {
 }
 
 const baseNavItems: NavItem[] = [
-  { label: "Extract", href: "/", icon: AlignLeftIcon, isAnimated: true, hoverContentKey: "extract" },
+  { label: "Extract", href: "/extract", icon: AlignLeftIcon, isAnimated: true, hoverContentKey: "extract" },
   { label: "Jobs", href: "/jobs", icon: GitCompareArrowsIcon, isAnimated: true, hoverContentKey: "jobs" },
   { label: "Schemas", href: "/schemas", icon: LayersIcon, isAnimated: true, hoverContentKey: "schemas", badgeKey: "pendingSchemas" },
   { label: "Workflows", href: "/workflows", icon: ZapIcon, isAnimated: true, hoverContentKey: "workflows", badgeKey: "pendingWorkflows" },

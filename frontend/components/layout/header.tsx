@@ -26,7 +26,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: "/", label: "Extract", icon: GanttChart },
+  { href: "/extract", label: "Extract", icon: GanttChart },
   { href: "/jobs", label: "Jobs", icon: GitCompareArrows },
   { href: "/schemas", label: "Schemas", icon: Braces },
   { href: "/providers", label: "Providers", icon: SettingsIcon, isAnimated: true },

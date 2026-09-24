@@ -380,7 +380,7 @@ export default function AdminPage() {
 
   // Redirect non-admins
   if (!authLoading && !isAdmin) {
-    router.push("/");
+    router.push("/extract");
     return null;
   }
 

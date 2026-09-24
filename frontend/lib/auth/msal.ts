@@ -42,7 +42,7 @@ export function clearAuthReturnTo(): void {
   sessionStorage.removeItem(AUTH_RETURN_TO_KEY);
 }
 
-export function consumeAuthReturnTo(defaultPath = "/"): string {
+export function consumeAuthReturnTo(defaultPath = "/extract"): string {
   const path = sessionStorage.getItem(AUTH_RETURN_TO_KEY) || defaultPath;
   sessionStorage.removeItem(AUTH_RETURN_TO_KEY);
   return path;
@@ -86,7 +86,7 @@ export function formatAuthError(error: unknown): string {
 
 /** Redirect-based login (same tab — no popup loading the landing page). */
 export async function loginWithMicrosoftRedirect(
-  returnTo = "/"
+  returnTo = "/extract"
 ): Promise<AccountInfo | null> {
   const instance = getMsalInstance();
   const redirectResult = await ensureMsalReady();

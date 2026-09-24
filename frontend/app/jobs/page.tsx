@@ -500,7 +500,7 @@ export default function JobsPage() {
                   : "Start extracting documents to see your job history here"}
               </p>
               {!searchQuery && (
-                <Button onClick={() => window.location.href = "/"}>
+                <Button onClick={() => window.location.href = "/extract"}>
                   <SparklesIcon size={16} className="mr-2" />
                   Extract Document
                 </Button>
