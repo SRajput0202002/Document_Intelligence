@@ -44,6 +44,15 @@ interface PDFViewerProps {
   drawPreviewPolygon?: number[][] | null;
   /** Fired when user finishes drawing a box */
   onBoxDrawn?: (result: DrawBoxResult) => void;
+  /**
+   * Continuous scroll mode: stack pages vertically so the user can scroll
+   * through them (used for multi-page segment preview).
+   */
+  continuous?: boolean;
+  /** Inclusive 1-indexed start page when limiting the view to a range */
+  pageStart?: number;
+  /** Inclusive 1-indexed end page when limiting the view to a range */
+  pageEnd?: number;
 }
 
 export function PDFViewer({
@@ -58,6 +67,9 @@ export function PDFViewer({
   drawMode = false,
   drawPreviewPolygon = null,
   onBoxDrawn,
+  continuous = false,
+  pageStart,
+  pageEnd,
 }: PDFViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -74,8 +86,10 @@ export function PDFViewer({
   const activeThumbnailRef = useRef<HTMLButtonElement>(null);
   const pageContainerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const continuousPageRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const [pageElement, setPageElement] = useState<HTMLElement | null>(null);
   const lastScrolledHighlightRef = useRef<string | null>(null);
+  const suppressScrollSyncRef = useRef(false);
 
   /** Polygon highlights from OCR include a 1-based page; only draw them on the matching visible page. */
   const highlightsForCurrentPage = useMemo(() => {
@@ -87,6 +101,25 @@ export function PDFViewer({
       return true;
     });
   }, [highlights, currentPage]);
+
+  const effectivePageStart = useMemo(() => {
+    if (!numPages) return 1;
+    const start = pageStart != null ? Math.max(1, Math.min(pageStart, numPages)) : 1;
+    return start;
+  }, [pageStart, numPages]);
+
+  const effectivePageEnd = useMemo(() => {
+    if (!numPages) return 1;
+    const end = pageEnd != null ? Math.max(1, Math.min(pageEnd, numPages)) : numPages;
+    return Math.max(effectivePageStart, end);
+  }, [pageEnd, numPages, effectivePageStart]);
+
+  const continuousPages = useMemo(() => {
+    if (!continuous || !numPages) return [] as number[];
+    const pages: number[] = [];
+    for (let p = effectivePageStart; p <= effectivePageEnd; p++) pages.push(p);
+    return pages;
+  }, [continuous, numPages, effectivePageStart, effectivePageEnd]);
 
   // Drag-to-pan state
   const [isDragging, setIsDragging] = useState(false);
@@ -100,15 +133,86 @@ export function PDFViewer({
     }
   }, []);
 
-  // Handle initialPage changes (for auto-navigation to highlighted content)
+  const scrollContinuousPageIntoView = useCallback((page: number, behavior: ScrollBehavior = "smooth") => {
+    const el = continuousPageRefs.current.get(page);
+    if (!el || !scrollContainerRef.current) return;
+    suppressScrollSyncRef.current = true;
+    el.scrollIntoView({ behavior, block: "start" });
+    window.setTimeout(() => {
+      suppressScrollSyncRef.current = false;
+    }, behavior === "smooth" ? 400 : 50);
+  }, []);
+
+  // Handle initialPage / range changes
   useEffect(() => {
-    if (initialPage && initialPage !== currentPage && initialPage >= 1 && initialPage <= numPages) {
-      setCurrentPage(initialPage);
+    if (!numPages) return;
+    const preferred = initialPage ?? effectivePageStart;
+    const clamped = Math.max(effectivePageStart, Math.min(preferred, effectivePageEnd));
+    setCurrentPage(clamped);
+    if (continuous) {
+      // Wait a tick for pages to mount
+      const t = window.setTimeout(() => scrollContinuousPageIntoView(clamped, "auto"), 50);
+      return () => window.clearTimeout(t);
     }
-  }, [initialPage, numPages]);
+  }, [
+    initialPage,
+    numPages,
+    effectivePageStart,
+    effectivePageEnd,
+    continuous,
+    scrollContinuousPageIntoView,
+  ]);
+
+  // Keep current page inside the active range
+  useEffect(() => {
+    if (!numPages) return;
+    if (currentPage < effectivePageStart || currentPage > effectivePageEnd) {
+      setCurrentPage(effectivePageStart);
+    }
+  }, [currentPage, effectivePageStart, effectivePageEnd, numPages]);
+
+  // Continuous mode: track which page is most visible while scrolling
+  useEffect(() => {
+    if (!continuous || !scrollContainerRef.current || continuousPages.length === 0) return;
+
+    const root = scrollContainerRef.current;
+    const ratios = new Map<number, number>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (suppressScrollSyncRef.current) return;
+        for (const entry of entries) {
+          const pageAttr = (entry.target as HTMLElement).dataset.pageNumber;
+          if (!pageAttr) continue;
+          ratios.set(Number(pageAttr), entry.intersectionRatio);
+        }
+        let bestPage = currentPage;
+        let bestRatio = -1;
+        ratios.forEach((ratio, page) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestPage = page;
+          }
+        });
+        if (bestRatio > 0 && bestPage !== currentPage) {
+          setCurrentPage(bestPage);
+          onPageChange?.(bestPage);
+        }
+      },
+      { root, threshold: [0.25, 0.5, 0.75] }
+    );
+
+    continuousPages.forEach((page) => {
+      const el = continuousPageRefs.current.get(page);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [continuous, continuousPages, currentPage, onPageChange]);
 
   // Reset page element when page changes or scale changes (so highlights recalculate)
   useEffect(() => {
+    if (continuous) return;
     setPageElement(null);
     // Small delay then re-fetch the page element
     const timer = setTimeout(() => {
@@ -118,7 +222,7 @@ export function PDFViewer({
       }
     }, 100);
     return () => clearTimeout(timer);
-  }, [currentPage, scale]);
+  }, [currentPage, scale, continuous]);
 
   useEffect(() => {
     if (file) {
@@ -272,19 +376,22 @@ export function PDFViewer({
     }
   }, [pdfFile, fileName]);
   const goToPrev = () => {
-    const newPage = Math.max(currentPage - 1, 1);
+    const newPage = Math.max(currentPage - 1, effectivePageStart);
     setCurrentPage(newPage);
     onPageChange?.(newPage);
+    if (continuous) scrollContinuousPageIntoView(newPage);
   };
   const goToNext = () => {
-    const newPage = Math.min(currentPage + 1, numPages);
+    const newPage = Math.min(currentPage + 1, effectivePageEnd);
     setCurrentPage(newPage);
     onPageChange?.(newPage);
+    if (continuous) scrollContinuousPageIntoView(newPage);
   };
   const goToPage = (page: number) => {
-    const newPage = Math.max(1, Math.min(page, numPages));
+    const newPage = Math.max(effectivePageStart, Math.min(page, effectivePageEnd));
     setCurrentPage(newPage);
     onPageChange?.(newPage);
+    if (continuous) scrollContinuousPageIntoView(newPage);
   };
 
   // Drag-to-pan handlers
@@ -419,7 +526,45 @@ export function PDFViewer({
                 </div>
               }
             >
-              {/* Wrapper sized for scaled content with padding for center-origin overflow */}
+              {continuous ? (
+                <div
+                  className="inline-flex flex-col items-center gap-4"
+                  style={{
+                    padding: scale > 1
+                      ? `${(scale - 1) * pageWidth * 0.35}px ${(scale - 1) * pageWidth * 0.5}px`
+                      : "0",
+                  }}
+                >
+                  {continuousPages.map((pageNumber) => (
+                    <div
+                      key={pageNumber}
+                      data-page-number={pageNumber}
+                      ref={(el) => {
+                        if (el) continuousPageRefs.current.set(pageNumber, el);
+                        else continuousPageRefs.current.delete(pageNumber);
+                      }}
+                      className="shadow-lg bg-white rounded overflow-hidden"
+                      style={{
+                        transform: `scale(${scale}) rotate(${rotation}deg)`,
+                        transformOrigin: "center top",
+                      }}
+                    >
+                      <Page
+                        pageNumber={pageNumber}
+                        width={pageWidth}
+                        renderTextLayer={true}
+                        renderAnnotationLayer={true}
+                        loading={
+                          <div className="flex items-center justify-center h-64 w-[600px]">
+                            <Loader2 className="w-6 h-6 animate-spin text-neutral-400" />
+                          </div>
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+              /* Wrapper sized for scaled content with padding for center-origin overflow */
               <div
                 style={{
                   display: 'inline-block',
@@ -470,6 +615,7 @@ export function PDFViewer({
                 )}
               </div>
               </div>
+              )}
             </Document>
           )}
 
@@ -500,10 +646,10 @@ export function PDFViewer({
           <div className="flex items-center gap-0.5 bg-white rounded-full shadow-md border border-neutral-200/80 px-1.5 py-0.5">
             <button
               onClick={goToPrev}
-              disabled={currentPage <= 1}
+              disabled={currentPage <= effectivePageStart}
               className={cn(
                 "p-0.5 rounded-full transition-colors",
-                currentPage <= 1
+                currentPage <= effectivePageStart
                   ? "text-neutral-300 cursor-not-allowed"
                   : "text-neutral-600 hover:bg-neutral-100"
               )}
@@ -511,14 +657,14 @@ export function PDFViewer({
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
             <span className="text-xs font-medium text-neutral-700 min-w-[40px] text-center">
-              {currentPage}/{numPages}
+              {currentPage}/{effectivePageEnd}
             </span>
             <button
               onClick={goToNext}
-              disabled={currentPage >= numPages}
+              disabled={currentPage >= effectivePageEnd}
               className={cn(
                 "p-0.5 rounded-full transition-colors",
-                currentPage >= numPages
+                currentPage >= effectivePageEnd
                   ? "text-neutral-300 cursor-not-allowed"
                   : "text-neutral-600 hover:bg-neutral-100"
               )}
@@ -626,13 +772,16 @@ export function PDFViewer({
           <div className="overflow-x-auto overflow-y-hidden thumbnail-strip-scrollbar">
             <Document file={pdfFile} loading={null}>
               <div className="flex items-start gap-3 px-4 py-3">
-                {Array.from({ length: numPages }, (_, i) => {
-                  const isSelected = currentPage === i + 1;
+                {(continuous && continuousPages.length > 0
+                  ? continuousPages
+                  : Array.from({ length: numPages }, (_, i) => i + 1)
+                ).map((pageNumber) => {
+                  const isSelected = currentPage === pageNumber;
                   return (
                     <button
-                      key={i + 1}
+                      key={pageNumber}
                       ref={isSelected ? activeThumbnailRef : null}
-                      onClick={() => goToPage(i + 1)}
+                      onClick={() => goToPage(pageNumber)}
                       className={cn(
                         "flex-shrink-0 flex flex-col items-center gap-2 p-2 rounded-lg transition-all",
                         isSelected
@@ -649,7 +798,7 @@ export function PDFViewer({
                         )}
                       >
                         <Page
-                          pageNumber={i + 1}
+                          pageNumber={pageNumber}
                           width={100}
                           renderTextLayer={false}
                           renderAnnotationLayer={false}
@@ -663,7 +812,7 @@ export function PDFViewer({
                             : "font-medium text-neutral-500"
                         )}
                       >
-                        {i}
+                        {pageNumber}
                       </span>
                     </button>
                   );

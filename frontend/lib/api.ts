@@ -1137,12 +1137,17 @@ class ApiClient {
    *
    * If ocrProvider and llmProvider are not provided, the backend will use
    * the user's settings (document_classifier for LLM, fallback_ocr for OCR).
+   *
+   * Optional pageStart/pageEnd (1-indexed, inclusive) limit inference to a
+   * multi-doc segment instead of the full PDF.
    */
   async inferSchema(
     file: File,
     ocrProvider?: string,
     llmProvider?: string,
-    guidance?: string
+    guidance?: string,
+    pageStart?: number,
+    pageEnd?: number
   ): Promise<SchemaInferenceResult> {
     const formData = new FormData();
     formData.append("file", file);
@@ -1155,6 +1160,10 @@ class ApiClient {
     }
     if (guidance) {
       formData.append("guidance", guidance);
+    }
+    if (pageStart != null && pageEnd != null) {
+      formData.append("page_start", String(pageStart));
+      formData.append("page_end", String(pageEnd));
     }
 
     return this.fetch<SchemaInferenceResult>("/api/extract/infer-schema", {

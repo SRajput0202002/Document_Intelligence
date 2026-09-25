@@ -1771,6 +1771,8 @@ async def infer_document_schema(
     ocr_provider: Optional[str] = Form(None),
     llm_provider: Optional[str] = Form(None),
     guidance: Optional[str] = Form(None),
+    page_start: Optional[int] = Form(None),
+    page_end: Optional[int] = Form(None),
     db: Session = Depends(get_db),
     current_user: Optional[User] = Depends(get_current_user),
 ):
@@ -1784,6 +1786,9 @@ async def infer_document_schema(
 
     Supports all document formats (PDF, images, DOCX, XLSX, etc.).
     Non-PDF files are converted to PDF for processing.
+
+    Optional ``page_start`` / ``page_end`` (1-indexed, inclusive) limit OCR and
+    schema inference to a multi-doc segment instead of the full file.
     """
     # Validate file format
     if not is_supported_format(file.filename):
@@ -1792,6 +1797,21 @@ async def infer_document_schema(
             status_code=400,
             detail=f"Unsupported file format. Supported: {supported_list}"
         )
+
+    # Optional segment page range (1-indexed inclusive)
+    page_range: Optional[Tuple[int, int]] = None
+    if page_start is not None or page_end is not None:
+        if page_start is None or page_end is None:
+            raise HTTPException(
+                status_code=400,
+                detail="Both page_start and page_end are required when limiting schema inference to a segment",
+            )
+        if page_start < 1 or page_end < page_start:
+            raise HTTPException(
+                status_code=400,
+                detail="Invalid page range: page_start and page_end must be >= 1 and page_end >= page_start",
+            )
+        page_range = (int(page_start), int(page_end))
 
     # Get user settings
     if current_user:
@@ -1840,7 +1860,11 @@ async def infer_document_schema(
                 detail=f"Unknown classifier '{classifier}'. Valid options: {list(classifier_to_llm.keys())}"
             )
 
-    logger.info(f"[infer-schema] Effective providers: ocr={effective_ocr}, llm={effective_llm} (classifier={classifier if not llm_provider else 'provided'})")
+    logger.info(
+        f"[infer-schema] Effective providers: ocr={effective_ocr}, llm={effective_llm} "
+        f"(classifier={classifier if not llm_provider else 'provided'})"
+        + (f", pages={page_range[0]}-{page_range[1]}" if page_range else "")
+    )
 
     temp_id = str(uuid.uuid4())
     temp_path = TEMP_DIR / f"{temp_id}_{file.filename}"
@@ -1854,14 +1878,27 @@ async def infer_document_schema(
             temp_path, file.filename, TEMP_DIR
         )
 
-        # Run OCR
+        # Run OCR (optionally limited to a multi-doc segment page range)
         from core.registry import ProviderRegistry
         ocr = ProviderRegistry.get_ocr_processor(effective_ocr)
-        ocr_result = ocr.process_pdf(str(working_path))
+        if page_range:
+            ocr_result = ocr.process_pdf(str(working_path), page_range=page_range)
+            # Some providers ignore page_range — slice as a safety net
+            if ocr_result and ocr_result.success and ocr_result.pages:
+                sliced = ocr_result.get_sliced_copy(page_range[0] - 1, page_range[1] - 1)
+                if sliced.pages:
+                    ocr_result = sliced
+        else:
+            ocr_result = ocr.process_pdf(str(working_path))
 
         if not ocr_result.success:
             raise HTTPException(status_code=500, detail=f"OCR failed: {ocr_result.error}")
 
+        if page_range and (not ocr_result.pages or len(ocr_result.pages) == 0):
+            raise HTTPException(
+                status_code=400,
+                detail=f"No OCR content for pages {page_range[0]}-{page_range[1]}",
+            )
         # Detect document type
         from core.intelligence.detector import DocumentTypeDetector
         detector = DocumentTypeDetector()

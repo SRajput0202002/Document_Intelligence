@@ -161,6 +161,8 @@ export default function ExtractPage() {
   const [inferredFields, setInferredFields] = useState<SchemaField[]>([]);
   const [inferredSchemaName, setInferredSchemaName] = useState<string>("");
   const [inferredDocType, setInferredDocType] = useState<string>("");
+  /** Multi-doc: segment index Create Schema was opened for (null = full document). */
+  const [schemaCreateSegmentIndex, setSchemaCreateSegmentIndex] = useState<number | null>(null);
 
   // Consensus extraction state
   const [enableConsensus, setEnableConsensus] = useState(false);
@@ -717,20 +719,40 @@ export default function ExtractPage() {
     });
   };
 
-  // Generate schema from document
+  // Generate schema from document (or from the selected multi-doc segment pages)
   // Always uses user's document_classifier and fallback_ocr settings from the backend
   // (These are separate from extraction settings - default_ocr_provider and default_llm_provider)
+  const getSegmentForSchemaCreate = () => {
+    if (!enableSegmentation || !segmentationResult?.segments?.length) return null;
+    if (schemaCreateSegmentIndex != null) {
+      return (
+        segmentationResult.segments.find((s) => s.index === schemaCreateSegmentIndex) || null
+      );
+    }
+    return (
+      segmentationResult.segments.find(
+        (s) =>
+          s.page_start === segmentPreviewPage ||
+          (segmentPreviewPage >= s.page_start && segmentPreviewPage <= s.page_end)
+      ) || null
+    );
+  };
+
   const handleGenerateSchema = async () => {
     if (!file) return;
 
     setIsInferringSchema(true);
     try {
+      const segment = getSegmentForSchemaCreate();
       // Schema inference uses document_classifier and fallback_ocr settings, NOT extraction providers
-      // Always pass undefined to let backend use the correct settings
+      // Always pass undefined for providers to let backend use the correct settings
       const result = await api.inferSchema(
         file,
         undefined,  // Let backend use fallback_ocr setting
-        undefined   // Let backend use document_classifier setting
+        undefined,  // Let backend use document_classifier setting
+        undefined,  // guidance
+        segment?.page_start,
+        segment?.page_end
       );
       const fields = jsonSchemaToFields(result.json_schema);
       setInferredFields(fields);
@@ -759,6 +781,8 @@ export default function ExtractPage() {
     setConsensusOcrProviders([]);
     setConsensusLlmProviders([]);
     setIsInferringSchema(false);
+    setIsCreatingSchema(false);
+    setSchemaCreateSegmentIndex(null);
     setInferredFields([]);
     setInferredSchemaName("");
     setInferredDocType("");
@@ -776,6 +800,7 @@ export default function ExtractPage() {
   /** Leave inline schema builder and return to multi-doc segment assignment. */
   const returnToSegmentsFromSchemaCreate = () => {
     setIsCreatingSchema(false);
+    setSchemaCreateSegmentIndex(null);
     setInferredFields([]);
     setInferredSchemaName("");
     setInferredDocType("");
@@ -1487,6 +1512,17 @@ export default function ExtractPage() {
                   {applyToAllEnabled && <CheckIcon size={14} className="text-primary" />}
                 </Button>
                 <Button onClick={() => {
+                  const active =
+                    segmentationResult?.segments.find(
+                      (s) =>
+                        s.page_start === segmentPreviewPage ||
+                        (segmentPreviewPage >= s.page_start &&
+                          segmentPreviewPage <= s.page_end)
+                    ) || segmentationResult?.segments[0];
+                  setSchemaCreateSegmentIndex(active?.index ?? null);
+                  setInferredFields([]);
+                  setInferredSchemaName("");
+                  setInferredDocType("");
                   setIsCreatingSchema(true);
                   setCurrentStep("schema");
                 }}>
@@ -1636,7 +1672,10 @@ export default function ExtractPage() {
                       ];
                       const selectedSchema = schemas.find(s => s.id === segmentSchemas[segment.index]);
 
-                      const isSelected = segmentPreviewPage === segment.page_start;
+                      const isSelected =
+                        segmentPreviewPage === segment.page_start ||
+                        (segmentPreviewPage >= segment.page_start &&
+                          segmentPreviewPage <= segment.page_end);
                       const bgColors = [
                         "bg-blue-500",
                         "bg-green-500",
@@ -1772,13 +1811,26 @@ export default function ExtractPage() {
                   })()}
                   {/* PDF Viewer */}
                   <div className="flex-1 min-h-0">
-                    {file && (
-                      <PDFViewer
-                        file={file}
-                        className="h-full w-full"
-                        initialPage={segmentPreviewPage}
-                      />
-                    )}
+                    {file && (() => {
+                      const selectedSegment = segmentationResult.segments.find(
+                        (s) =>
+                          s.page_start === segmentPreviewPage ||
+                          (segmentPreviewPage >= s.page_start &&
+                            segmentPreviewPage <= s.page_end)
+                      );
+                      return (
+                        <PDFViewer
+                          key={`segment-preview-${selectedSegment?.index ?? "none"}-${selectedSegment?.page_start ?? 1}-${selectedSegment?.page_end ?? 1}`}
+                          file={file}
+                          className="h-full w-full"
+                          continuous
+                          pageStart={selectedSegment?.page_start}
+                          pageEnd={selectedSegment?.page_end}
+                          initialPage={selectedSegment?.page_start ?? segmentPreviewPage}
+                          onPageChange={(page) => setSegmentPreviewPage(page)}
+                        />
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
@@ -1823,12 +1875,34 @@ export default function ExtractPage() {
           <>
             {isCreatingSchema ? (
               /* Inline Schema Builder - Full Height Split View */
+              (() => {
+                const schemaSegment = getSegmentForSchemaCreate();
+                const segmentLabel = schemaSegment
+                  ? `Document ${schemaSegment.index + 1} • Pages ${schemaSegment.page_start}-${schemaSegment.page_end}`
+                  : null;
+                const segmentDocType =
+                  schemaSegment?.detected_type?.replace(/_/g, " ") || undefined;
+                return (
               <div className="h-full w-full">
                 <SchemaBuilder
-                  key={inferredFields.length > 0 ? `inferred-${inferredFields.length}` : "empty"}
+                  key={
+                    inferredFields.length > 0
+                      ? `inferred-${schemaCreateSegmentIndex ?? "full"}-${inferredFields.length}`
+                      : `empty-${schemaCreateSegmentIndex ?? "full"}`
+                  }
                   initialFields={inferredFields.length > 0 ? inferredFields : undefined}
-                  initialName={inferredSchemaName || (detectedType?.primary_type?.replace(/_/g, " ")) || undefined}
-                  initialDocType={inferredDocType || (detectedType?.primary_type?.replace(/_/g, " ")) || undefined}
+                  initialName={
+                    inferredSchemaName ||
+                    segmentDocType ||
+                    (detectedType?.primary_type?.replace(/_/g, " ")) ||
+                    undefined
+                  }
+                  initialDocType={
+                    inferredDocType ||
+                    segmentDocType ||
+                    (detectedType?.primary_type?.replace(/_/g, " ")) ||
+                    undefined
+                  }
                   isLoading={isInferringSchema}
                   onGenerateSchema={handleGenerateSchema}
                   isGenerating={isInferringSchema}
@@ -1839,6 +1913,11 @@ export default function ExtractPage() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <FileTextIcon size={16} className="text-muted-foreground flex-shrink-0" />
                           <span className="text-sm font-medium truncate max-w-[180px]">{file?.name}</span>
+                          {segmentLabel && (
+                            <Badge variant="secondary" className="text-[10px] font-normal">
+                              {segmentLabel}
+                            </Badge>
+                          )}
 
                           {/* Detection Pills - Inline */}
                           {isDetecting ? (
@@ -1849,7 +1928,7 @@ export default function ExtractPage() {
                               </div>
                               <span className="text-[10px] text-muted-foreground">Detecting...</span>
                             </div>
-                          ) : detectedType && (
+                          ) : detectedType && !schemaSegment && (
                             <div className="flex items-center gap-1.5 flex-wrap">
                               {/* Primary Type Pill */}
                               <span
@@ -1878,12 +1957,29 @@ export default function ExtractPage() {
                               ))}
                             </div>
                           )}
+                          {schemaSegment?.detected_type && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
+                              {schemaSegment.detected_type.replace(/_/g, " ")}
+                              {typeof schemaSegment.type_confidence === "number" && (
+                                <span className="opacity-70">
+                                  {Math.round(schemaSegment.type_confidence * 100)}%
+                                </span>
+                              )}
+                            </span>
+                          )}
                         </div>
                       </div>
                       {/* Document Preview */}
                       <div className="flex-1 overflow-hidden">
                         {file && isPDF(file.name) ? (
-                          <PDFViewer file={file} showToolbar={true} />
+                          <PDFViewer
+                            file={file}
+                            showToolbar={true}
+                            continuous={!!schemaSegment && schemaSegment.page_end > schemaSegment.page_start}
+                            pageStart={schemaSegment?.page_start}
+                            pageEnd={schemaSegment?.page_end}
+                            initialPage={schemaSegment?.page_start ?? segmentPreviewPage ?? 1}
+                          />
                         ) : file && imagePreviewUrl ? (
                           <div className="h-full flex flex-col items-center justify-center bg-muted/30 p-4 overflow-auto">
                             <div className="relative max-w-full max-h-full">
@@ -1910,7 +2006,14 @@ export default function ExtractPage() {
                             <p className="text-sm text-destructive mt-2">{conversionError}</p>
                           </div>
                         ) : file && convertedPdfBlob ? (
-                          <PDFViewer file={convertedPdfBlob} showToolbar={true} />
+                          <PDFViewer
+                            file={convertedPdfBlob}
+                            showToolbar={true}
+                            continuous={!!schemaSegment && schemaSegment.page_end > schemaSegment.page_start}
+                            pageStart={schemaSegment?.page_start}
+                            pageEnd={schemaSegment?.page_end}
+                            initialPage={schemaSegment?.page_start ?? segmentPreviewPage ?? 1}
+                          />
                         ) : file ? (
                           <div className="h-full flex flex-col items-center justify-center bg-muted/30 p-4">
                             <FileTextIcon className="w-16 h-16 text-muted-foreground mb-4" />
@@ -1958,24 +2061,21 @@ export default function ExtractPage() {
                       await queryClient.invalidateQueries({ queryKey: ["schemas"] });
 
                       if (enableSegmentation) {
-                        // Multi-doc: assign to the segment currently previewed, then
-                        // return to the segments list so other schemas can be created.
-                        const activeSegment = segmentationResult?.segments.find(
-                          (s) =>
-                            s.page_start === segmentPreviewPage ||
-                            (segmentPreviewPage >= s.page_start &&
-                              segmentPreviewPage <= s.page_end)
-                        );
-                        if (activeSegment) {
+                        // Multi-doc: assign to the segment Create Schema was opened for
+                        const targetIndex =
+                          schemaCreateSegmentIndex ??
+                          getSegmentForSchemaCreate()?.index;
+                        if (targetIndex != null) {
                           setSegmentSchemas((prev) => ({
                             ...prev,
-                            [activeSegment.index]: schema.id,
+                            [targetIndex]: schema.id,
                           }));
                         }
                         returnToSegmentsFromSchemaCreate();
                       } else {
                         setSelectedSchema(schema);
                         setIsCreatingSchema(false);
+                        setSchemaCreateSegmentIndex(null);
                         setCurrentStep("config");
                       }
                     } catch (error) {
@@ -1987,10 +2087,13 @@ export default function ExtractPage() {
                       returnToSegmentsFromSchemaCreate();
                     } else {
                       setIsCreatingSchema(false);
+                      setSchemaCreateSegmentIndex(null);
                     }
                   }}
                 />
               </div>
+                );
+              })()
             ) : (
               /* Schema Selection Grid */
               <div className="max-w-5xl mx-auto">
